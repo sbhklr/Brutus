@@ -1,6 +1,7 @@
 import base64, string
 import struct
-from PIL import Image
+from PIL import Image # Using Pillow
+
 im = Image.open("img1.jpg") #Can be many different formats.
 im = im.resize((175,175), Image.ANTIALIAS)
 pix = im.load()
@@ -28,7 +29,7 @@ print hex(int(imgStr, 2))
 print 'base64:'
 print base64.b64encode(bytes(imgInt))
 
-# Manual Base64 
+# Manual Base64
 ALPHABET = string.ascii_uppercase + string.ascii_lowercase + \
            string.digits #+ '-_'
 ALPHABET_REVERSE = dict((c, i) for (i, c) in enumerate(ALPHABET))
