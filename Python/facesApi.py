@@ -1,15 +1,8 @@
 import httplib, urllib, base64, json
 
-
-
-
-
-
-
 fileName = "img2.jpg"
 with open(fileName, mode='rb') as file: # b is important -> binary
     fileContent = file.read()
-
 
 # Return format Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
 def getFaceData(imageContent):
@@ -87,11 +80,6 @@ def getFaceData(imageContent):
             faceInfo += '50'
         else:
             faceInfo += '0'
-
-
-
-        #[0].faceAttributes.makeup.eyeMakeup + '\n'
-        #print parsed[0].faceAttributes.makeup.lipMakeup + '\n'
 
         #print ("Response:")
         print (json.dumps(parsed, sort_keys=True, indent=2))
