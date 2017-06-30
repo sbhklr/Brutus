@@ -1,11 +1,22 @@
 import httplib, urllib, base64, json
+from threading import Timer
+import time
 
 fileName = "img2.jpg"
 with open(fileName, mode='rb') as file: # b is important -> binary
     fileContent = file.read()
 
+def sendStatus(status):
+    try:
+        conn = httplib.HTTPConnection("192.168.1.121", 9080)
+        conn.request("GET", "/?display=" + urllib.quote(status))
+        response = conn.getresponse()
+        print response.status, response.reason
+    except Exception as e:
+        print("[Errno {0}] {1}".format(e, e)) 
+
 # Return format Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
-def getFaceData(imageContent):
+def getFaceData(imageContent):    
     faceInfo = ''
 
     subscription_key = '9e5fa5720aea424e85a93282173aad81'
@@ -49,7 +60,7 @@ def getFaceData(imageContent):
         else:
             faceInfo += '0;'
 
-        if any("headwear" in s for s in faceAttributes['accessories']):
+        if faceAttributes['gender'] == 'male' and any("headwear" in s for s in faceAttributes['accessories']):
             faceInfo += '50;'
         else:
             faceInfo += '0;'
@@ -82,23 +93,28 @@ def getFaceData(imageContent):
             faceInfo += '0'
 
         #print ("Response:")
-        print (json.dumps(parsed, sort_keys=True, indent=2))
+        #print (json.dumps(parsed, sort_keys=True, indent=2))
         conn.close()
 
     except Exception as e:
-        print("[Errno {0}] {1}".format(e, e))
-    print faceInfo
+        print("[Errno {0}] {1}".format(e, e))    
     return faceInfo
 
     ####################################
+sendStatus("Analysing face...")
 faceInfo = getFaceData(fileContent)
-
+sendStatus("Printing...")
+print faceInfo
 print 'Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive\n'
 
 # This should do it
 # TODO 'pip install pyserial'
 # If pip is not installed on mac 'sudo easy_install pip'
 #
-# import serial
-# arduinoSerial = serial.Serial('/dev/tty.usbserial', 9600)
-# arduinoSerial.write(faceInfo+'\n')
+import serial
+#arduinoSerial = serial.Serial('/dev/tty.usbserial', 9600)
+arduinoSerial = serial.Serial('/dev/cu.usbmodem1411', 9600)
+arduinoSerial.write(faceInfo+'\n')
+
+time.sleep(5)
+sendStatus("Take your bill.")
