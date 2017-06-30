@@ -8,6 +8,8 @@
   to match your printer (hold feed button on powerup for test page).
   ------------------------------------------------------------------------*/
 
+#include <ZTimer.h>
+#include "Flora.h"
 #include "Adafruit_Thermal.h"
 #include "logo.h"
 #include "photo.h"
@@ -19,13 +21,25 @@
 #define TX_PIN 6 // Arduino transmit  YELLOW WIRE  labeled RX on printer
 #define RX_PIN 5 // Arduino receive   GREEN WIRE   labeled TX on printer
 #define BAUD_RATE 19200
-#define PUSH_BUTTON_PIN 2
+#define FLORA_PULSE_TIME 6000
 
+#define PUSH_BUTTON_PIN 2
+#define FLORA_LED_PIN 8
+
+ZTimer floraTimer;
+Flora flora = Flora(FLORA_LED_PIN);
 SoftwareSerial softwareSerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
 Adafruit_Thermal printer(&softwareSerial);     // Pass addr to printer constructor
 int previousPushButtonValue = HIGH;
 
 void setup() {
+	flora.setColor(50,50,150);
+	floraTimer.SetCallBack([&]() {
+	    flora.update();    
+	});
+	floraTimer.SetWaitTime(FLORA_PULSE_TIME / Flora::steps / 2);
+	floraTimer.ResetTimer(true);
+
 	pinMode(LED_BUILTIN, OUTPUT);
 	pinMode(PUSH_BUTTON_PIN, INPUT_PULLUP);
 	softwareSerial.begin(BAUD_RATE);  // Initialize SoftwareSerial  
@@ -55,13 +69,18 @@ void printLine(String line, char justify = 'L', char fontSize = 'S', bool bold =
 	if(feed > 0) printer.feed(feed);
 }
 
-void print(){	
+void print(){
+	flora.setBrightness(255);
+  	flora.setColor(255,50,50);
+
 	printer.begin();        // Init printer (same regardless of serial type)
 	printReceipt(0,0,50,0,95,0);
 	printer.sleep();      // Tell printer to sleep
 	delay(3000L);         // Sleep for 3 seconds
 	printer.wake();       // MUST wake() before printing again, even if reset
 	printer.setDefault(); // Restore printer to defaults
+
+	flora.setColor(50,50,150);
 }
 
 void readData(){
@@ -128,6 +147,7 @@ void printReceipt(int makeupFee, int pyjamaFee, int hipsterFee, int youngsterFee
 }
 
 void loop() {
+	floraTimer.CheckTime();
 	int buttonValue = digitalRead(PUSH_BUTTON_PIN);
 	
 	if(buttonValue == previousPushButtonValue) return;
