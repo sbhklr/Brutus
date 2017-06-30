@@ -2,10 +2,6 @@ import httplib, urllib, base64, json
 from threading import Timer
 import time
 
-fileName = "img2.jpg"
-with open(fileName, mode='rb') as file: # b is important -> binary
-    fileContent = file.read()
-
 def sendStatus(status):
     try:
         conn = httplib.HTTPConnection("192.168.1.121", 9080)
@@ -13,10 +9,10 @@ def sendStatus(status):
         response = conn.getresponse()
         print response.status, response.reason
     except Exception as e:
-        print("[Errno {0}] {1}".format(e, e)) 
+        print("[Errno {0}] {1}".format(e, e))
 
 # Return format Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
-def getFaceData(imageContent):    
+def getFaceData(imageContent):
     faceInfo = ''
 
     subscription_key = '9e5fa5720aea424e85a93282173aad81'
@@ -52,35 +48,34 @@ def getFaceData(imageContent):
         parsed = json.loads(data)
 
         # Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
-
         # No makeup
         faceAttributes = parsed[0]['faceAttributes']
         if(faceAttributes['gender'] == 'female' and (not faceAttributes['makeup']['eyeMakeup'] or not faceAttributes['makeup']['lipMakeup'])):
-            faceInfo += '50;'
+            faceInfo += '50'
         else:
-            faceInfo += '0;'
+            faceInfo += '00'
 
         if faceAttributes['gender'] == 'male' and any("headwear" in s for s in faceAttributes['accessories']):
-            faceInfo += '50;'
+            faceInfo += '50'
         else:
-            faceInfo += '0;'
+            faceInfo += '00'
 
         if(faceAttributes['facialHair']['beard'] > 0.5 and faceAttributes['facialHair']['moustache'] > 0.5):
-            faceInfo += '50;'
+            faceInfo += '50'
         else:
-            faceInfo += '0;'
+            faceInfo += '00'
 
         youngsterAge = 24
         if(faceAttributes['age'] < youngsterAge):
-            faceInfo += '{0};'.format(round((youngsterAge-faceAttributes['age'])*15))
+            faceInfo += '%02d' % (round((youngsterAge-faceAttributes['age'])*15),)
         else:
-            faceInfo += '0;'
+            faceInfo += '00'
 
         happinessThreshold = 0.5
         if(faceAttributes['emotion']['happiness'] < happinessThreshold):
-            faceInfo += '{0};'.format(round(100-faceAttributes['emotion']['happiness']*100))
+            faceInfo += '%02d' % (round(100-faceAttributes['emotion']['happiness']*100),)
         else:
-            faceInfo += '0;'
+            faceInfo += '00'
 
         aggressiveThreshold = 0.2
         if(faceAttributes['emotion']['anger'] > aggressiveThreshold or
@@ -90,31 +85,19 @@ def getFaceData(imageContent):
         faceAttributes['emotion']['sadness'] > aggressiveThreshold):
             faceInfo += '50'
         else:
-            faceInfo += '0'
+            faceInfo += '00'
 
         #print ("Response:")
         #print (json.dumps(parsed, sort_keys=True, indent=2))
         conn.close()
 
     except Exception as e:
-        print("[Errno {0}] {1}".format(e, e))    
+        print("[Errno {0}] {1}".format(e, e))
     return faceInfo
 
     ####################################
-sendStatus("Analysing face...")
-faceInfo = getFaceData(fileContent)
-sendStatus("Printing...")
-print faceInfo
-print 'Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive\n'
 
-# This should do it
-# TODO 'pip install pyserial'
-# If pip is not installed on mac 'sudo easy_install pip'
-#
-import serial
-#arduinoSerial = serial.Serial('/dev/tty.usbserial', 9600)
-arduinoSerial = serial.Serial('/dev/cu.usbmodem1411', 9600)
-arduinoSerial.write(faceInfo+'\n')
 
-time.sleep(5)
-sendStatus("Take your bill.")
+#faceInfo = getFaceData(fileContent)
+#print faceInfo
+#print 'Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive\n'

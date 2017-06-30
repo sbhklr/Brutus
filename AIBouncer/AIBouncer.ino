@@ -44,6 +44,7 @@ void setup() {
 	pinMode(PUSH_BUTTON_PIN, INPUT_PULLUP);
 	softwareSerial.begin(BAUD_RATE);  // Initialize SoftwareSerial  
 	Serial.begin(9600);
+  Serial.println("ready");
 	//print();
 }
 
@@ -84,18 +85,62 @@ void print(){
 }
 
 void readData(){
-	while (Serial.available() > 0) {
-		String faceInfo  = Serial.readStringUntil('\n');
-		/*
-		int makeupFee = faceInfo.substring(0,1);
-		int pyjamaFee = faceInfo.substring(2,3);
-		int hipsterFee = faceInfo.substring(4,5);
-		int youngsterFee = faceInfo.substring(8,9);
-		int badMoodFee = faceInfo.substring(11,12);
-		int aggressiveFee = faceInfo.substring(14,15);
-		*/
-		//0;0;50;0;95.0;0
+  String faceInfo = "";
+  bool receivedData = false;
+    for(int i = 0; i < Serial.available();i++){
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(25);
+      digitalWrite(LED_BUILTIN, LOW);
+      delay(25);
+    }
+  
+	while(Serial.available() > 0) {
+    char d = Serial.read();
+    faceInfo  = faceInfo + d;
+    receivedData = true;
 	}
+ 
+  if(receivedData){
+
+    /*printer.begin();
+    printLine(faceInfo, 'L', 'S', false, false, 1);
+    printer.sleep();      // Tell printer to sleep
+    delay(3000L);         // Sleep for 3 seconds
+    printer.wake();       // MUST wake() before printing again, even if reset
+    printer.setDefault(); // Restore printer to defaults */
+    
+    Serial.println("got the data");
+    Serial.println(faceInfo);
+    Serial.println("end data");
+    Serial.flush();
+    
+    int makeupFee =  faceInfo.substring(0,2).toInt();
+    int pyjamaFee = faceInfo.substring(2,4).toInt();
+    int hipsterFee = faceInfo.substring(4,6).toInt();
+    int youngsterFee = faceInfo.substring(8,10).toInt();
+    int badMoodFee = faceInfo.substring(10,12).toInt();
+    int aggressiveFee = faceInfo.substring(12,14).toInt();   
+    /*
+    Serial.print("makeupFee:");
+    Serial.println(makeupFee);
+    Serial.print("pyjamaFee:");
+    Serial.println(pyjamaFee);
+    Serial.print("hipsterFee:");
+    Serial.println(hipsterFee);
+    Serial.print("youngsterFee:");
+    Serial.println(youngsterFee);
+    Serial.print("badMoodFee:");
+    Serial.println(badMoodFee);
+    Serial.print("aggressiveFee:");
+    Serial.println(aggressiveFee); */
+    /*
+    printer.begin();
+    printReceipt(makeupFee, pyjamaFee, hipsterFee, youngsterFee, badMoodFee, aggressiveFee);
+    printer.sleep();      // Tell printer to sleep
+    delay(3000L);         // Sleep for 3 seconds
+    printer.wake();       // MUST wake() before printing again, even if reset
+    printer.setDefault(); // Restore printer to defaults*/
+ }
 }
 
 String formattedCurrency(int number){
@@ -147,17 +192,24 @@ void printReceipt(int makeupFee, int pyjamaFee, int hipsterFee, int youngsterFee
 }
 
 void loop() {
+<<<<<<< Updated upstream
 	floraTimer.CheckTime();
+=======
+
+  readData();
+  
+>>>>>>> Stashed changes
 	int buttonValue = digitalRead(PUSH_BUTTON_PIN);
 	
 	if(buttonValue == previousPushButtonValue) return;
 	previousPushButtonValue = buttonValue;
 
 	if(buttonValue == LOW){
-		print();
+		// print();
+    Serial.println("buttonPressed");
 		delay(4000);
 	} 
 
-	delay(20);
+	delay(200);
 
 }
