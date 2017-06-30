@@ -8,7 +8,7 @@
   to match your printer (hold feed button on powerup for test page).
   ------------------------------------------------------------------------*/
 
-#include <ZTimer.h>
+#include "ZTimer.h"
 #include "Flora.h"
 #include "Adafruit_Thermal.h"
 #include "logo.h"
@@ -33,6 +33,7 @@ Adafruit_Thermal printer(&softwareSerial);     // Pass addr to printer construct
 int previousPushButtonValue = HIGH;
 
 void setup() {
+  flora.setBrightness(255);
 	flora.setColor(50,50,150);
 	floraTimer.SetCallBack([&]() {
 	    flora.update();    
@@ -192,14 +193,9 @@ void printReceipt(int makeupFee, int pyjamaFee, int hipsterFee, int youngsterFee
 }
 
 void loop() {
-<<<<<<< Updated upstream
 	floraTimer.CheckTime();
-=======
-
   readData();
-  
->>>>>>> Stashed changes
-	int buttonValue = digitalRead(PUSH_BUTTON_PIN);
+ 	int buttonValue = digitalRead(PUSH_BUTTON_PIN);
 	
 	if(buttonValue == previousPushButtonValue) return;
 	previousPushButtonValue = buttonValue;
@@ -210,6 +206,5 @@ void loop() {
 		delay(4000);
 	} 
 
-	delay(200);
-
+	delay(20);
 }
