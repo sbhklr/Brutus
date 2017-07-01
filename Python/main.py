@@ -17,9 +17,13 @@ pictureFileName = "photo.jpg"
 if is_raspberry_pi:
     import picamera
     camera = picamera.PiCamera()
-    camera.capture(pictureFileName)
+    camera.resolution = (864, 648)
+    camera.brightness = 80
+    camera.contrast = 75
+    camera.rotation = 90
     #camera.hflip = True
     #camera.vflip = True
+    camera.capture(pictureFileName)
 
 with open(pictureFileName, mode='rb') as file: # b is important -> binary
     fileContent = file.read()
