@@ -5,14 +5,13 @@ from PIL import Image # Using Pillow
 # logo_width  384 (176)
 # logo_height 153
 
-spacing = 0
+spacing = 105
 
-
-
- #Can be many different formats.
+# Returns 8 Bit Int Array
 def imageParse(fileName):
+    parsedImageArray = []
     im = Image.open(fileName)
-    im = im.resize((36,36), Image.ANTIALIAS)
+    im = im.resize((176,153), Image.ANTIALIAS)
     pix = im.load()
     print im.size #Get the width and hight of the image for iterating over
     (r,g,b) = pix[1,1]
@@ -31,9 +30,6 @@ def imageParse(fileName):
                 currentBlock += '0'
 
             if(len(currentBlock)>=8):
-                #print currentBlock
-                #print '%03d\n' % int(currentBlock, 2)
-                imgStr += '%03d' % int(currentBlock, 2)
+                parsedImageArray.append(int(currentBlock, 2))
                 currentBlock = ''
-    return imgStr
-#int(imgStr, 2)
+    return parsedImageArray
