@@ -5,7 +5,7 @@ from PIL import Image # Using Pillow
 # logo_width  384 (176)
 # logo_height 153
 
-spacing = 105
+spacing = 104
 
 # Returns 8 Bit Int Array
 def imageParse(fileName):
