@@ -53,7 +53,7 @@ def calculateFee(imageContent):
         if(faceAttributes['gender'] == 'female' and (not faceAttributes['makeup']['eyeMakeup'] or not faceAttributes['makeup']['lipMakeup'])):            
             fee.makeup = 50        
 
-        if faceAttributes['gender'] == 'male' and any("headwear" in s for s in faceAttributes['accessories']):            
+        if faceAttributes['gender'] == 'male' and any((accessory['type'] == "headwear" and accessory['confidence'] > 0.5) for accessory in faceAttributes['accessories']):            
             fee.pyjama = 50        
 
         if(faceAttributes['facialHair']['beard'] > 0.5 and faceAttributes['facialHair']['moustache'] > 0.5):            
@@ -76,7 +76,7 @@ def calculateFee(imageContent):
             fee.aggressive = 50
 
         #print ("Response:")
-        #print (json.dumps(parsed, sort_keys=True, indent=2))
+        print (json.dumps(parsed, sort_keys=True, indent=2))
         conn.close()
 
     except Exception as e:
