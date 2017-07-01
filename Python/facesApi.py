@@ -61,11 +61,11 @@ def calculateFee(imageContent):
 
         youngsterAge = 24
         if(faceAttributes['age'] < youngsterAge):            
-            fee.youngster = round((youngsterAge-faceAttributes['age'])*15)        
+            fee.youngster = int(round((youngsterAge-faceAttributes['age'])*15))
 
         happinessThreshold = 0.5
         if(faceAttributes['emotion']['happiness'] < happinessThreshold):            
-            fee.badMood = round(100-faceAttributes['emotion']['happiness']*100)
+            fee.badMood = int(round(100-faceAttributes['emotion']['happiness']*100))
 
         aggressiveThreshold = 0.2
         if(faceAttributes['emotion']['anger'] > aggressiveThreshold or
