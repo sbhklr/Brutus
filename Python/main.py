@@ -26,7 +26,14 @@ with open(pictureFileName, mode='rb') as file: # b is important -> binary
 
 def buttonPressed():
     # sendStatus("Analysing face...")
-    fee = calculateFee(fileContent)    
+    fee = calculateFee(fileContent)
+    print "Makeup: " + str(fee.makeup)
+    print "Pyjama: " + str(fee.pyjama)
+    print "Hipster: " + str(fee.hipster)
+    print "Youngster: " + str(fee.youngster)
+    print "badMood: " + str(fee.badMood)
+    print "Aggressive: " + str(fee.aggressive)
+    
     photoData = imageParse(pictureFileName)
 
     #sendStatus("Printing...")        
