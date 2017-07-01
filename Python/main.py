@@ -1,55 +1,36 @@
+#!/usr/bin/python
+
 import serial
 import facesApi
 import time
-
-from facesApi import getFaceData
+from thermal_printer import ThermalPrinter
+from facesApi import calculateFee
 from imageParse import imageParse
 
-arduinoSerial = serial.Serial('/dev/cu.usbmodem144211', 115200)
-command = arduinoSerial.readline() # wait till arduino is ready
+arduinoSerial = None #serial.Serial('/dev/cu.usbmodem144211', 115200)
+if arduinoSerial is not None:
+    command = arduinoSerial.readline() # wait till arduino is ready
 
 fileName = "img2.jpg"
+
 with open(fileName, mode='rb') as file: # b is important -> binary
     fileContent = file.read()
 
 def buttonPressed():
     # sendStatus("Analysing face...")
-    faceInfo = getFaceData(fileContent)
-    # faceInfo = "000050009500"
-
-    #sendStatus("Printing...")
-    #print faceInfo
-    print 'Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive\n'
-
-    # faceInfoData = (faceInfo + ';\n').encode()
-    #arduinoSerial.write((faceInfo + ';\n').encode())
-    #arduinoSerial.write(bytes(faceInfo + ';\n'))
-    # bytes(faceInfo + ';\n')
-    arduinoSerial.write('E')
-    arduinoSerial.write('F' + faceInfo)
-    print faceInfo
+    fee = calculateFee(fileContent)    
     photoData = imageParse(fileName)
-    print photoData
 
-    time.sleep(0.5)
-    arduinoSerial.write('E')
-    time.sleep(0.5)
-    arduinoSerial.write('DE')
-    time.sleep(0.5)
-    #arduinoSerial.write('I' + photoData + ';');
+    #sendStatus("Printing...")        
+    #thermal_printer = ThermalPrinter(photoData,384,153)
+    thermal_printer = ThermalPrinter()
+    thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
 
-    # arduinoSerial.write('PE')
+    #sendStatus("Take your bill.")    
 
-    # arduinoSerial.write('\n')
-
-    #time.sleep(5)
-    #sendStatus("Take your bill.")
-    print 'sent\n'
-
-print "button pressed"
 buttonPressed()
 
-print "button pressed end"
-while True:
-    command = arduinoSerial.readline()
-    print command
+if arduinoSerial is not None:
+    while True:
+        command = arduinoSerial.readline()
+        print command

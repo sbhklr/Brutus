@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import serial
 import random
 from Adafruit_Thermal import *
 
