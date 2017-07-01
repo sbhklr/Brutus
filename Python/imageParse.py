@@ -2,48 +2,38 @@ import base64, string
 import struct
 from PIL import Image # Using Pillow
 
-im = Image.open("img1.jpg") #Can be many different formats.
-im = im.resize((175,175), Image.ANTIALIAS)
-pix = im.load()
-print im.size #Get the width and hight of the image for iterating over
-(r,g,b) = pix[1,1]
-imgStr = ''
-print 'binary:'
-for y in range(0, im.width):
-    line = ''
-    for x in range(0, im.width):
-        (r,g,b) = pix[x,y]
-        if((r+b+g)/3 >= 128):
-            line += '1'
-        else:
-            line += '0'
-    imgStr += line
-    print line
-        # print '{0}-{1}'.format(x, y)
+# logo_width  384 (176)
+# logo_height 153
 
-print 'decimal:'
-imgInt = int(imgStr, 2)
-print imgInt
-print 'hex:'
-print hex(int(imgStr, 2))
-print 'base64:'
-print base64.b64encode(bytes(imgInt))
+spacing = 0
 
-# Manual Base64
-ALPHABET = string.ascii_uppercase + string.ascii_lowercase + \
-           string.digits #+ '-_'
-ALPHABET_REVERSE = dict((c, i) for (i, c) in enumerate(ALPHABET))
-BASE = len(ALPHABET)
-SIGN_CHARACTER = '$'
 
-def num_encode(n):
-    if n < 0:
-        return SIGN_CHARACTER + num_encode(-n)
-    s = []
-    while True:
-        n, r = divmod(n, BASE)
-        s.append(ALPHABET[r])
-        if n == 0: break
-    return ''.join(reversed(s))
-print 'base{0}(special):'.format(BASE)
-print num_encode(imgInt)
+
+ #Can be many different formats.
+def imageParse(fileName):
+    im = Image.open(fileName)
+    im = im.resize((36,36), Image.ANTIALIAS)
+    pix = im.load()
+    print im.size #Get the width and hight of the image for iterating over
+    (r,g,b) = pix[1,1]
+    imgStr = ''
+    currentBlock = '';
+    for y in range(0, im.height):
+        line = ''
+        for x in range(0, im.width + spacing * 2):
+            if(x > spacing and x < (im.width + spacing)):
+                (r,g,b) = pix[x-spacing,y]
+                if((r+b+g)/3 >= 128):
+                    currentBlock += '1'
+                else:
+                    currentBlock += '0'
+            else:
+                currentBlock += '0'
+
+            if(len(currentBlock)>=8):
+                #print currentBlock
+                #print '%03d\n' % int(currentBlock, 2)
+                imgStr += '%03d' % int(currentBlock, 2)
+                currentBlock = ''
+    return imgStr
+#int(imgStr, 2)

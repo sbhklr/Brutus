@@ -12,7 +12,6 @@
 #include "Flora.h"
 #include "Adafruit_Thermal.h"
 #include "logo.h"
-#include "photo.h"
 
 // Here's the new syntax when using SoftwareSerial (e.g. Arduino Uno) ----
 // If using hardware serial instead, comment out or remove these lines:
@@ -25,12 +24,24 @@
 
 #define PUSH_BUTTON_PIN 2
 #define FLORA_LED_PIN 8
+#define PHOTO_WIDTH 36 
+#define PHOTO_HEIGHT 36 
+const int PHOTO_DATA_SIZE = PHOTO_WIDTH * PHOTO_HEIGHT / 8;
 
 ZTimer floraTimer;
 Flora flora = Flora(FLORA_LED_PIN);
 SoftwareSerial softwareSerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
 Adafruit_Thermal printer(&softwareSerial);     // Pass addr to printer constructor
 int previousPushButtonValue = HIGH;
+
+int serialDataMode = 0;
+String currentBlock = "";
+
+uint8_t photo_data[PHOTO_DATA_SIZE];
+int currentPhotoDataIndex = 0;
+String faceInfo = "";
+// int imageSpacing = 104;
+
 
 void setup() {
   flora.setBrightness(255);
@@ -44,9 +55,11 @@ void setup() {
 	pinMode(LED_BUILTIN, OUTPUT);
 	pinMode(PUSH_BUTTON_PIN, INPUT_PULLUP);
 	softwareSerial.begin(BAUD_RATE);  // Initialize SoftwareSerial  
-	Serial.begin(9600);
+	Serial.begin(115200);
   Serial.println("ready");
 	//print();
+
+  memset(photo_data, 0, PHOTO_DATA_SIZE);
 }
 
 String generateRandomNumber(int digits){
@@ -86,62 +99,85 @@ void print(){
 }
 
 void readData(){
-  String faceInfo = "";
+
   bool receivedData = false;
-    for(int i = 0; i < Serial.available();i++){
-      digitalWrite(LED_BUILTIN, HIGH);
-      delay(25);
-      digitalWrite(LED_BUILTIN, LOW);
-      delay(25);
-    }
   
 	while(Serial.available() > 0) {
-    char d = Serial.read();
-    faceInfo  = faceInfo + d;
-    receivedData = true;
-	}
- 
-  if(receivedData){
+    char currentChar = Serial.read();
+    Serial.print(currentChar);
+    
+    if(currentChar == 'E'){
+      serialDataMode = 0;
+      Serial.println(faceInfo);
+      Serial.println("end data");
+    }
 
-    /*printer.begin();
-    printLine(faceInfo, 'L', 'S', false, false, 1);
-    printer.sleep();      // Tell printer to sleep
-    delay(3000L);         // Sleep for 3 seconds
-    printer.wake();       // MUST wake() before printing again, even if reset
-    printer.setDefault(); // Restore printer to defaults */
-    
-    Serial.println("got the data");
-    Serial.println(faceInfo);
-    Serial.println("end data");
-    Serial.flush();
-    
-    int makeupFee =  faceInfo.substring(0,2).toInt();
-    int pyjamaFee = faceInfo.substring(2,4).toInt();
-    int hipsterFee = faceInfo.substring(4,6).toInt();
-    int youngsterFee = faceInfo.substring(8,10).toInt();
-    int badMoodFee = faceInfo.substring(10,12).toInt();
-    int aggressiveFee = faceInfo.substring(12,14).toInt();   
-    /*
-    Serial.print("makeupFee:");
-    Serial.println(makeupFee);
-    Serial.print("pyjamaFee:");
-    Serial.println(pyjamaFee);
-    Serial.print("hipsterFee:");
-    Serial.println(hipsterFee);
-    Serial.print("youngsterFee:");
-    Serial.println(youngsterFee);
-    Serial.print("badMoodFee:");
-    Serial.println(badMoodFee);
-    Serial.print("aggressiveFee:");
-    Serial.println(aggressiveFee); */
-    /*
-    printer.begin();
-    printReceipt(makeupFee, pyjamaFee, hipsterFee, youngsterFee, badMoodFee, aggressiveFee);
-    printer.sleep();      // Tell printer to sleep
-    delay(3000L);         // Sleep for 3 seconds
-    printer.wake();       // MUST wake() before printing again, even if reset
-    printer.setDefault(); // Restore printer to defaults*/
- }
+    if(serialDataMode == 1){
+      faceInfo  = faceInfo + currentChar;
+    }else if(serialDataMode == 2){
+      /*
+        if(currentBlock.length() == 3){ // add to array
+          photo_data[currentPhotoDataIndex] = currentBlock.toInt();
+          currentBlock = "";
+          currentPhotoDataIndex++;
+        }else{
+          currentBlock = currentBlock + currentChar;
+        }*/
+    }
+
+    if(currentChar == 'F'){
+        serialDataMode = 1;
+        Serial.println("start face");
+    }else if(currentChar == 'I'){
+      /*
+        if(currentBlock.length() == 3){ // add to array
+          photo_data[currentPhotoDataIndex] = currentBlock.toInt();
+          currentBlock = "";
+          currentPhotoDataIndex++;
+        }else{
+          currentBlock = currentBlock + currentChar;
+        }*/
+    }else if(currentChar == 'I'){
+      Serial.println("start image");
+      serialDataMode = 2;
+    }else if(currentChar == 'D'){
+      Serial.println(faceInfo);
+    }else if(currentChar == 'P'){
+      Serial.println("start to print");
+
+      int makeupFee =  faceInfo.substring(0,2).toInt();
+      int pyjamaFee = faceInfo.substring(2,4).toInt();
+      int hipsterFee = faceInfo.substring(4,6).toInt();
+      int youngsterFee = faceInfo.substring(8,10).toInt();
+      int badMoodFee = faceInfo.substring(10,12).toInt();
+      int aggressiveFee = faceInfo.substring(12,14).toInt();   
+      
+      Serial.print("makeupFee:");
+      Serial.println(makeupFee);
+      Serial.print("pyjamaFee:");
+      Serial.println(pyjamaFee);
+      Serial.print("hipsterFee:");
+      Serial.println(hipsterFee);
+      Serial.print("youngsterFee:");
+      Serial.println(youngsterFee);
+      Serial.print("badMoodFee:");
+      Serial.println(badMoodFee);
+      Serial.print("aggressiveFee:");
+      Serial.println(aggressiveFee); 
+      
+      /*printer.begin();
+      printReceipt(makeupFee, pyjamaFee, hipsterFee, youngsterFee, badMoodFee, aggressiveFee);
+      printer.sleep();      // Tell printer to sleep
+      delay(3000L);         // Sleep for 3 seconds
+      printer.wake();       // MUST wake() before printing again, even if reset
+      printer.setDefault(); // Restore printer to defaults*/
+
+      // reset vars
+      faceInfo = "";
+      memset(photo_data, 0, PHOTO_DATA_SIZE);
+      currentPhotoDataIndex = 0;
+    }
+ 	}
 }
 
 String formattedCurrency(int number){
@@ -156,7 +192,7 @@ void printReceipt(int makeupFee, int pyjamaFee, int hipsterFee, int youngsterFee
 	printLine(F("ROOTS"), 'C', 'L', true, false, 1);
 
 	//Print photo
-	//printer.printBitmap(photo_width, photo_height, photo_data);
+	printer.printBitmap(PHOTO_WIDTH, PHOTO_HEIGHT, photo_data);
 	printer.feed(1);
 	printer.setLineHeight(36);
 
