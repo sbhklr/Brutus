@@ -55,7 +55,7 @@ class ThermalPrinter:
 
 		#Print photo
 		if self.photo_data is not None:
-			self.printer.printBitmap(PHOTO_WIDTH, PHOTO_HEIGHT, photo_data)
+			self.printer.printBitmap(self.photo_width, self.photo_height, self.photo_data)
 		
 		self.printer.feed(1)
 		self.printer.setLineHeight(36)
