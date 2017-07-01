@@ -4,6 +4,7 @@ import serial
 import random
 from Adafruit_Thermal import *
 
+#SEE: https://github.com/adafruit/Python-Thermal-Printer
 class ThermalPrinter:	
 
 	def __init__(self, photo_data = None, image_width = 0, image_height = 0):
