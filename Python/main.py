@@ -14,7 +14,9 @@ if arduinoSerial is not None:
 
 pictureFileName = "photo.jpg"
 
-if is_raspberry_pi:
+def takePicture():
+    if not is_raspberry_pi:
+        return        
     import picamera
     camera = picamera.PiCamera()
     camera.resolution = (864, 648)
@@ -23,13 +25,17 @@ if is_raspberry_pi:
     camera.rotation = 90
     #camera.hflip = True
     #camera.vflip = True
+    camera.start_preview()
+    sleep(2)
     camera.capture(pictureFileName)
+    camera.stop_preview()
 
-with open(pictureFileName, mode='rb') as file: # b is important -> binary
-    fileContent = file.read()
 
 def buttonPressed():
     # sendStatus("Analysing face...")
+    takePicture()
+    with open(pictureFileName, mode='rb') as file: # b is important -> binary
+        fileContent = file.read()
     fee = calculateFee(fileContent)
     print "Makeup: " + str(fee.makeup)
     print "Pyjama: " + str(fee.pyjama)
