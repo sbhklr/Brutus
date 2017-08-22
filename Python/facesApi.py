@@ -10,7 +10,12 @@ class Fee:
         self.youngster = 0
         self.badMood = 0
         self.aggressive = 0
-
+        self.gender = ""
+        self.age = 0
+        self.hasHeadwear = False
+        self.hasFacialHair = False
+        self.hasMakeup = False
+        self.hasBadMood = False
 
 # Return format Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
 def calculateFee(imageContent):
@@ -52,14 +57,21 @@ def calculateFee(imageContent):
         if len(parsed) == 0:
             return None
         faceAttributes = parsed[0]['faceAttributes']
+        fee.gender = faceAttributes['gender']
+        fee.age = faceAttributes['age']
+        if any((accessory['type'] == "headwear" and accessory['confidence'] > 0.5) for accessory in faceAttributes['accessories']):
+            fee.hasHeadwear = True
+
         if(faceAttributes['gender'] == 'female' and (not faceAttributes['makeup']['eyeMakeup'] or not faceAttributes['makeup']['lipMakeup'])):
             fee.makeup = 50
+            fee.hasMakeup = True
 
         if faceAttributes['gender'] == 'male' and any((accessory['type'] == "headwear" and accessory['confidence'] > 0.5) for accessory in faceAttributes['accessories']):
             fee.pyjama = 50
 
         if(faceAttributes['facialHair']['beard'] > 0.5 and faceAttributes['facialHair']['moustache'] > 0.5):
             fee.hipster = 50
+            fee.hasFacialHair = True
 
         youngsterAge = 24
         if(faceAttributes['age'] < youngsterAge):
@@ -68,6 +80,7 @@ def calculateFee(imageContent):
         happinessThreshold = 0.5
         if(faceAttributes['emotion']['happiness'] < happinessThreshold):
             fee.badMood = int(round(100-faceAttributes['emotion']['happiness']*100))
+            fee.hasBadMood = True
 
         aggressiveThreshold = 0.2
         if(faceAttributes['emotion']['anger'] > aggressiveThreshold or
@@ -82,5 +95,5 @@ def calculateFee(imageContent):
         conn.close()
 
     except Exception as e:
-        print("[Errno {0}] {1}".format(e, e))
+        print("[Errno {0}] {1}".format(e, data))
     return fee

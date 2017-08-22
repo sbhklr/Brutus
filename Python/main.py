@@ -15,7 +15,7 @@ GPIO.setmode(GPIO.BCM)
 is_raspberry_pi = os.uname()[1] == "raspberrypi"
 
 if is_raspberry_pi:
-    import picamera        
+    import picamera
     camera = picamera.PiCamera()
     camera.resolution = (864, 648)
     camera.brightness = 80
@@ -45,9 +45,14 @@ def sendSerialMsg(status):
     if arduinoSerial is not None:
         arduinoSerial.write(status + "\n")
 
-def buttonPressed(pin, time):
-    print("Button pressed")
-    # sendStatus("Analysing face...")
+        self.age = 0
+        self.hasHeadwear = False
+        self.hasFacialHair = False
+        self.hasMakeup = False
+        self.hasBadMood = False
+
+def buttonPressed():
+    sendStatus("Analysing face...", 0)
     sendSerialMsg('P')
 
     if is_raspberry_pi:
@@ -61,6 +66,17 @@ def buttonPressed(pin, time):
 
     fee = calculateFee(fileContent)
     if fee is not None:
+        sendStatus("Estimated age " + fee.age, 0)
+        if fee.hasHeadwear:
+            sendStatus("Headwear detected", 2000)
+        else if fee.hasMakeup:
+            sendStatus("Makeup detected", 2000)
+        else if fee.hasFacialHair:
+            sendStatus("Beard detected", 2000)
+
+        if fee.hasBadMood:
+            sendStatus("Bad mood detected", 4000)
+
         print "Makeup: " + str(fee.makeup)
         print "Pyjama: " + str(fee.pyjama)
         print "Hipster: " + str(fee.hipster)
@@ -72,6 +88,7 @@ def buttonPressed(pin, time):
 
         #sendStatus("Printing...")
         if is_raspberry_pi and noPrint == False:
+            sendStatus("Printing...", 6000)
             thermal_printer = ThermalPrinter(photoData,384,153)
             thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
 
@@ -80,12 +97,13 @@ def buttonPressed(pin, time):
         sendSerialMsg('E')
 
     #sendStatus("Take your bill.")
+    sendStatus("Take your bill.", 1000)
 
 buttonTracker1 = ButtonTracker(6, buttonPressed)
 buttonTracker2 = ButtonTracker(13, buttonPressed)
 buttonTracker3 = ButtonTracker(19, buttonPressed)
 
-while True:    
+while True:
     time.sleep(0.1)
 
     #if arduinoSerial is not None:
