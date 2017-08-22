@@ -40,6 +40,12 @@ def buttonPressed(pin, time):
     if is_raspberry_pi:
         pictureFileName = "photo.jpg"
         camera = picamera.PiCamera()
+        camera.resolution = (864, 648)
+        camera.brightness = 80
+        camera.contrast = 75
+        camera.rotation = 90
+        #camera.hflip = True
+        #camera.vflip = True
         camera.capture(pictureFileName)
     else:
         pictureFileName = "photoDummy3.jpg"
