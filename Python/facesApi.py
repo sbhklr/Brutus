@@ -3,7 +3,7 @@
 import httplib, urllib, base64, json
 
 class Fee:
-    def __init__(self):    
+    def __init__(self):
         self.makeup = 0
         self.pyjama = 0
         self.hipster = 0
@@ -14,9 +14,9 @@ class Fee:
 
 # Return format Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
 def calculateFee(imageContent):
-    fee = Fee()    
+    fee = Fee()
 
-    subscription_key = '9e5fa5720aea424e85a93282173aad81'
+    subscription_key = '1d91ae43ac75492a8b0f3af82431925f'
 
     uri_base = 'westcentralus.api.cognitive.microsoft.com'
 
@@ -43,28 +43,30 @@ def calculateFee(imageContent):
         conn.request("POST", "/face/v1.0/detect?%s" % params, body, headers)
         response = conn.getresponse()
         data = response.read()
-
         # 'data' contains the JSON data. The following formats the JSON data for display.
         parsed = json.loads(data)
 
         # Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
         # No makeup
+
+        if len(parsed) == 0:
+            return None
         faceAttributes = parsed[0]['faceAttributes']
-        if(faceAttributes['gender'] == 'female' and (not faceAttributes['makeup']['eyeMakeup'] or not faceAttributes['makeup']['lipMakeup'])):            
-            fee.makeup = 50        
+        if(faceAttributes['gender'] == 'female' and (not faceAttributes['makeup']['eyeMakeup'] or not faceAttributes['makeup']['lipMakeup'])):
+            fee.makeup = 50
 
-        if faceAttributes['gender'] == 'male' and any((accessory['type'] == "headwear" and accessory['confidence'] > 0.5) for accessory in faceAttributes['accessories']):            
-            fee.pyjama = 50        
+        if faceAttributes['gender'] == 'male' and any((accessory['type'] == "headwear" and accessory['confidence'] > 0.5) for accessory in faceAttributes['accessories']):
+            fee.pyjama = 50
 
-        if(faceAttributes['facialHair']['beard'] > 0.5 and faceAttributes['facialHair']['moustache'] > 0.5):            
-            fee.hipster = 50        
+        if(faceAttributes['facialHair']['beard'] > 0.5 and faceAttributes['facialHair']['moustache'] > 0.5):
+            fee.hipster = 50
 
         youngsterAge = 24
-        if(faceAttributes['age'] < youngsterAge):            
+        if(faceAttributes['age'] < youngsterAge):
             fee.youngster = int(round((youngsterAge-faceAttributes['age'])*15))
 
         happinessThreshold = 0.5
-        if(faceAttributes['emotion']['happiness'] < happinessThreshold):            
+        if(faceAttributes['emotion']['happiness'] < happinessThreshold):
             fee.badMood = int(round(100-faceAttributes['emotion']['happiness']*100))
 
         aggressiveThreshold = 0.2
@@ -72,7 +74,7 @@ def calculateFee(imageContent):
         faceAttributes['emotion']['contempt'] > aggressiveThreshold or
         faceAttributes['emotion']['disgust'] > aggressiveThreshold or
         faceAttributes['emotion']['fear'] > aggressiveThreshold or
-        faceAttributes['emotion']['sadness'] > aggressiveThreshold):            
+        faceAttributes['emotion']['sadness'] > aggressiveThreshold):
             fee.aggressive = 50
 
         #print ("Response:")

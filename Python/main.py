@@ -6,47 +6,65 @@ from facesApi import calculateFee
 from imageParse import imageParse
 import os
 import sys
-
-noPrint = False
-for eachArg in sys.argv:
-    if eachArg == "noprint":
-        noPrint = True
-
 is_raspberry_pi = os.uname()[1] == "raspberrypi"
-
-arduinoSerial = None #serial.Serial('/dev/cu.usbmodem144211', 115200)
-if arduinoSerial is not None:
-    command = arduinoSerial.readline() # wait till arduino is ready
-
-pictureFileName = "photoDummy.jpg"
 
 if is_raspberry_pi:
     import picamera
-    pictureFileName = "photo.jpg"
-    camera = picamera.PiCamera()
-    camera.capture(pictureFileName)
-    #camera.hflip = True
-    #camera.vflip = True
 
-with open(pictureFileName, mode='rb') as file: # b is important -> binary
-    fileContent = file.read()
+# Parse Arguments
+noPrint = False
+arduinoSerial = True
+for eachArg in sys.argv:
+    if eachArg == "noprint":
+        noPrint = True
+    if eachArg == "noserial":
+        arduinoSerial = None
+
+
+if arduinoSerial is not None:
+    if is_raspberry_pi:
+        arduinoSerial = serial.Serial('/dev/cu.usbmodem144211', 9600)
+    else:
+        arduinoSerial = serial.Serial('/dev/cu.usbmodem146221', 9600)
+    command = arduinoSerial.readline() # wait till arduino is ready
+
+def sendSerialMsg(status):
+    if arduinoSerial is not None:
+        arduinoSerial.write(status + "\n")
 
 def buttonPressed():
     # sendStatus("Analysing face...")
+    sendSerialMsg('P')
+
+    if is_raspberry_pi:
+        pictureFileName = "photo.jpg"
+        camera = picamera.PiCamera()
+        camera.capture(pictureFileName)
+    else:
+        pictureFileName = "photoDummy3.jpg"
+
+    with open(pictureFileName, mode='rb') as file: # b is important -> binary
+        fileContent = file.read()
+
     fee = calculateFee(fileContent)
-    print "Makeup: " + str(fee.makeup)
-    print "Pyjama: " + str(fee.pyjama)
-    print "Hipster: " + str(fee.hipster)
-    print "Youngster: " + str(fee.youngster)
-    print "badMood: " + str(fee.badMood)
-    print "Aggressive: " + str(fee.aggressive)
+    if fee is not None:
+        print "Makeup: " + str(fee.makeup)
+        print "Pyjama: " + str(fee.pyjama)
+        print "Hipster: " + str(fee.hipster)
+        print "Youngster: " + str(fee.youngster)
+        print "badMood: " + str(fee.badMood)
+        print "Aggressive: " + str(fee.aggressive)
 
-    photoData = imageParse(pictureFileName)
+        photoData = imageParse(pictureFileName)
 
-    #sendStatus("Printing...")
-    if is_raspberry_pi and noPrint == False:
-        thermal_printer = ThermalPrinter(photoData,384,153)
-        thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
+        #sendStatus("Printing...")
+        if is_raspberry_pi and noPrint == False:
+            thermal_printer = ThermalPrinter(photoData,384,153)
+            thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
+
+    # ERROR Image not recognised
+    else:
+        sendSerialMsg('E')
 
     #sendStatus("Take your bill.")
 
