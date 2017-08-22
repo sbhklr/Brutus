@@ -15,7 +15,14 @@ GPIO.setmode(GPIO.BCM)
 is_raspberry_pi = os.uname()[1] == "raspberrypi"
 
 if is_raspberry_pi:
-    import picamera
+    import picamera        
+    camera = picamera.PiCamera()
+    camera.resolution = (864, 648)
+    camera.brightness = 80
+    camera.contrast = 75
+    camera.rotation = 90
+    #camera.hflip = True
+    #camera.vflip = True
 
 # Parse Arguments
 noPrint = False
@@ -39,18 +46,12 @@ def sendSerialMsg(status):
         arduinoSerial.write(status + "\n")
 
 def buttonPressed(pin, time):
+    print("Button pressed")
     # sendStatus("Analysing face...")
     sendSerialMsg('P')
 
     if is_raspberry_pi:
         pictureFileName = "photo.jpg"
-        camera = picamera.PiCamera()
-        camera.resolution = (864, 648)
-        camera.brightness = 80
-        camera.contrast = 75
-        camera.rotation = 90
-        #camera.hflip = True
-        #camera.vflip = True
         camera.capture(pictureFileName)
     else:
         pictureFileName = "photoDummy3.jpg"
