@@ -23,8 +23,8 @@ if is_raspberry_pi:
     import picamera
     camera = picamera.PiCamera()
     camera.resolution = (864, 648)
-    camera.brightness = 50
-    camera.contrast = 50
+    camera.brightness = 40
+    camera.contrast = 40
     camera.rotation = 90
     #camera.hflip = True
     #camera.vflip = True
@@ -80,6 +80,8 @@ def buttonPressed(pin, time):
             sendStatus("Headwear detected", 1)
         if fee.hasMakeup:
             sendStatus("Makeup detected", 1 * 2)
+        else:
+            sendStatus("No makeup detected", 1 * 2)
         if fee.hasFacialHair:
             sendStatus("Beard detected", 1 * 3)
         if fee.hasBadMood:
