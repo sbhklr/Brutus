@@ -3,7 +3,7 @@ from multiprocessing import Process
 import time
 
 def sendStatus(status, delay):
-    Process(target=httpSend, args=(status,sleep,)).start()
+    Process(target=httpSend, args=(status,delay,)).start()
 
 def httpSend(status, delay):
     try:

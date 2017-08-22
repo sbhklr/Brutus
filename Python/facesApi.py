@@ -91,7 +91,7 @@ def calculateFee(imageContent):
             fee.aggressive = 50
 
         #print ("Response:")
-        print (json.dumps(parsed, sort_keys=True, indent=2))
+        # print (json.dumps(parsed, sort_keys=True, indent=2))
         conn.close()
 
     except Exception as e:
