@@ -86,7 +86,6 @@ buttonTracker3 = ButtonTracker(19, buttonPressed)
 while True:    
     time.sleep(0.1)
 
-if arduinoSerial is not None:
-    while True:
-        command = arduinoSerial.readline()
-        print command
+    #if arduinoSerial is not None:
+    #    command = arduinoSerial.readline()
+    #    print command
