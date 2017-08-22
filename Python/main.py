@@ -77,14 +77,13 @@ def buttonPressed(pin, time):
         # Messages
         sendStatus("Estimated age " + str(int(round(fee.age))), 0)
         if fee.hasHeadwear:
-            sendStatus("Headwear detected", 2000)
-        elif fee.hasMakeup:
-            sendStatus("Makeup detected", 2000)
-        elif fee.hasFacialHair:
-            sendStatus("Beard detected", 2000)
-
+            sendStatus("Headwear detected", 0.75)
+        if fee.hasMakeup:
+            sendStatus("Makeup detected", 0.75 * 2)
+        if fee.hasFacialHair:
+            sendStatus("Beard detected", 0.75 * 3)
         if fee.hasBadMood:
-            sendStatus("Bad mood detected", 4000)
+            sendStatus("Bad mood detected", 0.75 * 4)
 
         # Add aggressive fee if multi press of button happens
 
@@ -99,12 +98,12 @@ def buttonPressed(pin, time):
 
         #sendStatus("Printing...")
         if is_raspberry_pi and noPrint == False:
-            sendStatus("Printing...", 6000)
+            sendStatus("Printing...", 0.75 * 5)
             thermal_printer = ThermalPrinter(photoData,384,153)
             thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
             sendStatus("Done.", 0)
         else:
-            sendStatus("Done.", 6000)
+            sendStatus("Done.", 0.75 * 5)
     # ERROR Image not recognised
     else:
         sendSerialMsg('E')
