@@ -59,12 +59,6 @@ def sendSerialMsg(status):
     if arduinoSerial is not None:
         arduinoSerial.write(status + "\n")
 
-        self.age = 0
-        self.hasHeadwear = False
-        self.hasFacialHair = False
-        self.hasMakeup = False
-        self.hasBadMood = False
-
 def buttonPressed(pin, time):
     sendStatus("Analysing face...", 0)
     sendSerialMsg('P')
