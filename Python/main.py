@@ -23,8 +23,8 @@ if is_raspberry_pi:
     import picamera
     camera = picamera.PiCamera()
     camera.resolution = (864, 648)
-    camera.brightness = 80
-    camera.contrast = 75
+    camera.brightness = 50
+    camera.contrast = 50
     camera.rotation = 90
     #camera.hflip = True
     #camera.vflip = True
@@ -77,13 +77,13 @@ def buttonPressed(pin, time):
         # Messages
         sendStatus("Estimated age " + str(int(round(fee.age))), 0)
         if fee.hasHeadwear:
-            sendStatus("Headwear detected", 0.75)
+            sendStatus("Headwear detected", 1)
         if fee.hasMakeup:
-            sendStatus("Makeup detected", 0.75 * 2)
+            sendStatus("Makeup detected", 1 * 2)
         if fee.hasFacialHair:
-            sendStatus("Beard detected", 0.75 * 3)
+            sendStatus("Beard detected", 1 * 3)
         if fee.hasBadMood:
-            sendStatus("Bad mood detected", 0.75 * 4)
+            sendStatus("Bad mood detected", 1 * 4)
 
         # Add aggressive fee if multi press of button happens
 
@@ -98,15 +98,16 @@ def buttonPressed(pin, time):
 
         #sendStatus("Printing...")
         if is_raspberry_pi and noPrint == False:
-            sendStatus("Printing...", 0.75 * 5)
+            sendStatus("Printing...", 1 * 5)
             thermal_printer = ThermalPrinter(photoData,384,153)
             thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
             sendStatus("Done.", 0)
         else:
-            sendStatus("Done.", 0.75 * 5)
+            sendStatus("Done.", 1 * 5)
     # ERROR Image not recognised
     else:
         sendSerialMsg('E')
+        sendStatus("No face detected.", 0)
     #sendStatus("Take your bill.")
 
 if is_raspberry_pi:
