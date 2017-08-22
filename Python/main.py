@@ -102,7 +102,9 @@ def buttonPressed(pin, time):
             sendStatus("Printing...", 6000)
             thermal_printer = ThermalPrinter(photoData,384,153)
             thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
-
+            sendStatus("Done.", 0)
+        else:
+            sendStatus("Done.", 6000)
     # ERROR Image not recognised
     else:
         sendSerialMsg('E')
