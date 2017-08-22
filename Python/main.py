@@ -7,6 +7,7 @@ from imageParse import imageParse
 from button_logic import ButtonTracker
 import os
 import sys
+import time
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
@@ -28,7 +29,7 @@ for eachArg in sys.argv:
 
 if arduinoSerial is not None:
     if is_raspberry_pi:
-        arduinoSerial = serial.Serial('/dev/cu.usbmodem144211', 9600)
+        arduinoSerial = serial.Serial('/dev/ttyACM0', 9600)
     else:
         arduinoSerial = serial.Serial('/dev/cu.usbmodem146221', 9600)
     command = arduinoSerial.readline() # wait till arduino is ready
