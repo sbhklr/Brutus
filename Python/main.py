@@ -65,7 +65,7 @@ def sendSerialMsg(status):
         self.hasMakeup = False
         self.hasBadMood = False
 
-def buttonPressed():
+def buttonPressed(pin, time):
     sendStatus("Analysing face...", 0)
     sendSerialMsg('P')
 
@@ -119,7 +119,7 @@ if is_raspberry_pi:
     buttonTracker2 = ButtonTracker(13, buttonPressed)
     buttonTracker3 = ButtonTracker(19, buttonPressed)
 else:
-    buttonPressed()
+    buttonPressed(0,0)
 
 while True:
     time.sleep(0.1)
