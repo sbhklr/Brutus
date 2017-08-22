@@ -37,7 +37,7 @@ void setup() {
   pinMode(CAMERA_LED_PIN, OUTPUT);
   cameraLedPixel = Adafruit_NeoPixel(1, CAMERA_LED_PIN, NEO_GRB + NEO_KHZ800);
   cameraLedPixel.begin();  
-  setCameraLed(255,0,0);
+  setCameraLedToDefault();
   
 	Serial.begin(BAUD_RATE);
   Serial.println("ready");
@@ -51,7 +51,16 @@ void processSerialCommands(){
     if(currentChar == 'P'){
       setCameraLed(255,255,255);
       delay(800);
-      setCameraLed(255,0,0);
+      setCameraLedToDefault();
+    }
+    if(currentChar == 'E'){
+      for(int i = 0; i < 3;i++){
+        setCameraLed(255,0,0);
+        delay(200);
+        setCameraLed(0,0,0);
+        delay(200);
+      }
+      setCameraLedToDefault();
     }
  	}
 }
@@ -60,6 +69,10 @@ void setCameraLed(int r, int g, int b){
   cameraLedPixel.setBrightness(100);
   cameraLedPixel.setPixelColor(0, cameraLedPixel.Color(r,g,b));     
   cameraLedPixel.show(); 
+}
+
+void setCameraLedToDefault(){
+  setCameraLed(0,0,200);
 }
 
 void loop() {
