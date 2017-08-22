@@ -4,6 +4,7 @@ import serial
 from thermal_printer import ThermalPrinter
 from facesApi import calculateFee
 from imageParse import imageParse
+from button_logic import ButtonTracker
 import os
 import sys
 is_raspberry_pi = os.uname()[1] == "raspberrypi"
@@ -32,7 +33,7 @@ def sendSerialMsg(status):
     if arduinoSerial is not None:
         arduinoSerial.write(status + "\n")
 
-def buttonPressed():
+def buttonPressed(pin, time):
     # sendStatus("Analysing face...")
     sendSerialMsg('P')
 
@@ -68,7 +69,12 @@ def buttonPressed():
 
     #sendStatus("Take your bill.")
 
-buttonPressed()
+buttonTracker1 = ButtonTracker(6, buttonPressed)
+buttonTracker2 = ButtonTracker(13, buttonPressed)
+buttonTracker3 = ButtonTracker(19, buttonPressed)
+
+while True:    
+    time.sleep(0.1)
 
 if arduinoSerial is not None:
     while True:
