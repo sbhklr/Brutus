@@ -7,6 +7,10 @@ from imageParse import imageParse
 from button_logic import ButtonTracker
 import os
 import sys
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM)
+
 is_raspberry_pi = os.uname()[1] == "raspberrypi"
 
 if is_raspberry_pi:
