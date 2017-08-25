@@ -9,6 +9,7 @@ from multiprocessing import Process
 import os
 import sys
 import time
+from time import sleep
 import termios
 orig_settings = termios.tcgetattr(sys.stdin)
 
