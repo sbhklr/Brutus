@@ -89,6 +89,7 @@ def calculateFee(imageContent):
         faceAttributes['emotion']['fear'] > aggressiveThreshold or
         faceAttributes['emotion']['sadness'] > aggressiveThreshold):
             fee.aggressive = 50
+            fee.isAggressive = True
 
         #print ("Response:")
         # print (json.dumps(parsed, sort_keys=True, indent=2))

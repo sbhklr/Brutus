@@ -59,7 +59,8 @@ def sendSerialMsg(status):
     if arduinoSerial is not None:
         arduinoSerial.write(status + "\n")
 
-def buttonPressed(pin, time):
+def buttonPressed(pins, time):
+    #print("Pressed buttons: ", pins)    
     sendStatus("Analysing face...", 0)
     sendSerialMsg('P')
 
@@ -84,8 +85,14 @@ def buttonPressed(pin, time):
             sendStatus("No makeup detected", 1 * 2)
         if fee.hasFacialHair:
             sendStatus("Beard detected", 1 * 3)
+        if fee.isAggressive:
+            sendStatus("Aggressive behavior detected", 1 * 4)
+        elif sum(pins) > 1:
+            fee.aggressive = 50
+            sendStatus("Aggressive behavior detected", 1 * 4)
         if fee.hasBadMood:
-            sendStatus("Bad mood detected", 1 * 4)
+            sendStatus("Bad mood detected", 1 * 5)
+
 
         # Add aggressive fee if multi press of button happens
 
@@ -100,12 +107,12 @@ def buttonPressed(pin, time):
 
         #sendStatus("Printing...")
         if is_raspberry_pi and noPrint == False:
-            sendStatus("Printing...", 1 * 5)
+            sendStatus("Printing...", 1 * 6)
             thermal_printer = ThermalPrinter(photoData,384,153)
             thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
             sendStatus("Done.", 0)
         else:
-            sendStatus("Done.", 1 * 5)
+            sendStatus("Done.", 1 * 6)
     # ERROR Image not recognised
     else:
         sendSerialMsg('E')
@@ -113,9 +120,7 @@ def buttonPressed(pin, time):
     #sendStatus("Take your bill.")
 
 if is_raspberry_pi:
-    buttonTracker1 = ButtonTracker(6, buttonPressed)
-    buttonTracker2 = ButtonTracker(13, buttonPressed)
-    buttonTracker3 = ButtonTracker(19, buttonPressed)
+    buttonTracker = ButtonTracker(6, 13, 19, buttonPressed)    
 else:
     buttonPressed(0,0)
 
