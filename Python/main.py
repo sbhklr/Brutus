@@ -66,7 +66,7 @@ def buttonPressed(pins, time):
     if is_raspberry_pi:
         pictureFileName = "photo.jpg"
         camera.start_preview()
-        sleep(0.5)
+        sleep(0.25)
         camera.capture(pictureFileName)
         camera.stop_preview()
     else:
