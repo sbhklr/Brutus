@@ -16,6 +16,7 @@ class Fee:
         self.hasFacialHair = False
         self.hasMakeup = False
         self.hasBadMood = False
+        self.isAggressive = False
 
 # Return format Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
 def calculateFee(imageContent):
