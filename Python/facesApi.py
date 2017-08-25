@@ -49,6 +49,7 @@ def calculateFee(imageContent):
         conn.request("POST", "/face/v1.0/detect?%s" % params, body, headers)
         response = conn.getresponse()
         data = response.read()
+        print("Data loaded.")
         # 'data' contains the JSON data. The following formats the JSON data for display.
         parsed = json.loads(data)
 
