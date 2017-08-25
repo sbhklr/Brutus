@@ -61,18 +61,19 @@ def sendSerialMsg(status):
         arduinoSerial.write(status + "\n")
 
 def buttonPressed(pins, time):
-    #print("Pressed buttons: ", pins)    
-    sendStatus("Analysing face...", 0)
-    sendSerialMsg('P')
+    #print("Pressed buttons: ", pins)        
 
     if is_raspberry_pi:
         pictureFileName = "photo.jpg"
         camera.start_preview()
-        sleep(1)
+        sleep(0.5)
         camera.capture(pictureFileName)
         camera.stop_preview()
     else:
         pictureFileName = "photoDummy2.jpg"
+
+    sendStatus("Analysing face...", 0)
+    sendSerialMsg('P')
 
     with open(pictureFileName, mode='rb') as file: # b is important -> binary
         fileContent = file.read()
