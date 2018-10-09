@@ -17,23 +17,11 @@ orig_settings = termios.tcgetattr(sys.stdin)
 
 is_raspberry_pi = os.uname()[1] == "raspberrypi"
 
-if is_raspberry_pi:
-    import RPi.GPIO as GPIO
-    GPIO.setmode(GPIO.BCM)
-    from button_logic import ButtonTracker
-    import picamera
-    camera = picamera.PiCamera()
-    camera.resolution = (864, 648)
-    camera.brightness = 60
-    camera.contrast = 45
-    camera.rotation = 90
-    #camera.hflip = True
-    #camera.vflip = True
-
 # Parse Arguments
 noPrint = True
 arduinoSerial = None
 noHttp = False
+noCamera = False
 
 for eachArg in sys.argv:
     if eachArg == "noprint":
@@ -42,6 +30,23 @@ for eachArg in sys.argv:
         arduinoSerial = None
     if eachArg == "nohttp":
         noHttp = True
+    if eachArg == "nocamera":
+        noCamera = True
+
+if is_raspberry_pi:
+    import RPi.GPIO as GPIO
+    GPIO.setmode(GPIO.BCM)
+    from button_logic import ButtonTracker
+    if noCamera != True:
+        import picamera
+        camera = picamera.PiCamera()
+        camera.resolution = (864, 648)
+        camera.brightness = 60
+        camera.contrast = 45
+        camera.rotation = 90
+        #camera.hflip = True
+        #camera.vflip = True
+
 
 if noHttp:
     def sendStatus(status, delay):
@@ -63,7 +68,7 @@ def sendSerialMsg(status):
 def buttonPressed(pins, time):
     #print("Pressed buttons: ", pins)        
 
-    if is_raspberry_pi:
+    if is_raspberry_pi and noCamera != True:
         pictureFileName = "photo.jpg"
         camera.start_preview()
         sleep(0.25)
