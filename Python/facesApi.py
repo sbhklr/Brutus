@@ -22,7 +22,8 @@ class Fee:
 def calculateFee(imageContent):
     fee = Fee()
 
-    subscription_key = '1d91ae43ac75492a8b0f3af82431925f'
+    subscription_key = 'f6f9914945dc40c5b8dfead928864193'
+    subscription_key = '577afa5697ac4121a20b70786bd1b8b9'
 
     uri_base = 'westcentralus.api.cognitive.microsoft.com'
 
