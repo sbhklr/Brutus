@@ -31,8 +31,8 @@ if is_raspberry_pi:
     #camera.vflip = True
 
 # Parse Arguments
-noPrint = False
-arduinoSerial = True
+noPrint = True
+arduinoSerial = None
 noHttp = False
 
 for eachArg in sys.argv:
@@ -92,7 +92,7 @@ def buttonPressed(pins, time):
             sendStatus("Beard detected", 1 * 3)
         if fee.isAggressive:
             sendStatus("Aggressive behavior detected", 1 * 4)
-        elif sum(pins) > 1:
+        elif pins != 0 and sum(pins) > 1:
             fee.aggressive = 50
             sendStatus("Aggressive behavior detected", 1 * 4)
         if fee.hasBadMood:
@@ -125,7 +125,8 @@ def buttonPressed(pins, time):
     #sendStatus("Take your bill.")
 
 if is_raspberry_pi:
-    buttonTracker = ButtonTracker(6, 13, 19, buttonPressed)    
+    # buttonTracker = ButtonTracker(6, 13, 19, buttonPressed)    
+    buttonPressed(0,0)
 else:
     buttonPressed(0,0)
 
@@ -134,6 +135,3 @@ while True:
     x=sys.stdin.read(1)[0]
     print("You pressed", x)
 
-    #if arduinoSerial is not None:
-    #    command = arduinoSerial.readline()
-    #    print command
