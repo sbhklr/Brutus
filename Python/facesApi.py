@@ -53,7 +53,7 @@ def calculateFee(imageContent):
         print("Data loaded.")
         # 'data' contains the JSON data. The following formats the JSON data for display.
         parsed = json.loads(data)
-
+        print(data)
         # Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
         # No makeup
 
