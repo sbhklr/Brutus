@@ -13,6 +13,10 @@ from time import sleep
 import evdev #SEE: https://python-evdev.readthedocs.io/en/latest/apidoc.html#
 from neopixel import *
 
+#######################################
+displayIP = "192.168.1.121"
+
+
 ########## NEO PIXEL SETUP ############
 LED_COUNT      = 9      # Number of LED pixels.
 LED_PIN_FLORA  = 18      # GPIO pin connected to the pixels (18 uses PWM!).
@@ -98,7 +102,7 @@ if is_raspberry_pi:
 
 
 if noHttp:
-    def sendStatus(status, delay):
+    def sendStatus(ip, status, delay):
         print status
 else:
     from sendStatus import sendStatus
@@ -126,7 +130,7 @@ def buttonPressed(pins=[], timestamp=0):
     else:
         pictureFileName = "photoDummy2.jpg"
 
-    sendStatus("Analysing face...", 0)
+    sendStatus(displayIP, "Analysing face...", 0)
     sendSerialMsg('P')
     flashLedGreen()
 
@@ -136,26 +140,26 @@ def buttonPressed(pins=[], timestamp=0):
     fee = calculateFee(fileContent)
     if fee is not None:
         # Messages
-        sendStatus("Estimated age " + str(int(round(fee.age))), 0)
+        sendStatus(displayIP, "Estimated age " + str(int(round(fee.age))), 0)
         if fee.hasHeadwear:
-            sendStatus("Headwear detected", 1)
+            sendStatus(displayIP, "Headwear detected", 1)
         if fee.hasMakeup:
-            sendStatus("Makeup detected", 1 * 2)
+            sendStatus(displayIP, "Makeup detected", 1 * 2)
         elif fee.gender == "female":
-            sendStatus("No makeup detected", 1 * 2)
+            sendStatus(displayIP, "No makeup detected", 1 * 2)
         if fee.hasFacialHair:
-            sendStatus("Beard detected", 1 * 3)
+            sendStatus(displayIP, "Beard detected", 1 * 3)
         if fee.isAggressive:
-            sendStatus("Aggressive behavior detected", 1 * 4)
+            sendStatus(displayIP, "Aggressive behavior detected", 1 * 4)
         elif sum(pins) > 1:
             fee.aggressive = 50
-            sendStatus("Aggressive behavior detected", 1 * 4)
+            sendStatus(displayIP, "Aggressive behavior detected", 1 * 4)
         if fee.hasBadMood:
-            sendStatus("Bad mood detected", 1 * 5)
+            sendStatus(displayIP, "Bad mood detected", 1 * 5)
 
         # Add aggressive fee if multi press of button happens
         print "Makeup: " + str(fee.makeup)
-        print "Pyjama: " + str(fee.pyjama)
+        print "Underdressed: " + str(fee.pyjama)
         print "Hipster: " + str(fee.hipster)
         print "Youngster: " + str(fee.youngster)
         print "badMood: " + str(fee.badMood)
@@ -164,16 +168,16 @@ def buttonPressed(pins=[], timestamp=0):
         photoData = imageParse(pictureFileName)
         
         if is_raspberry_pi and noPrint == False:
-            sendStatus("Printing...", 1 * 6)
+            sendStatus(displayIP, "Printing...", 1 * 6)
             thermal_printer = ThermalPrinter(photoData,384,153)
             thermal_printer.printReceipt(fee)
-            sendStatus("Done.", 0)
+            sendStatus(displayIP, "Done.", 0)
         else:
-            sendStatus("Done.", 1 * 6)    
+            sendStatus(displayIP, "Done.", 1 * 6)    
     else:
         sendSerialMsg('E')
         flashLedRed()
-        sendStatus("No face detected.", 0)         
+        sendStatus(displayIP, "No face detected.", 0)         
 
 if is_raspberry_pi:
     #To use custom made button use ButtonTracker
