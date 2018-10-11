@@ -10,12 +10,14 @@ import os
 import sys
 import time
 from time import sleep
-import termios
-orig_settings = termios.tcgetattr(sys.stdin)
+
+#SEE: https://python-evdev.readthedocs.io/en/latest/apidoc.html#
+import evdev
 
 
+is_raspberry_pi = os.uname()[0] == "Linux"
 
-is_raspberry_pi = os.uname()[1] == "raspberrypi"
+print "Running on: " + str(os.uname())
 
 # Parse Arguments
 noPrint = True
@@ -37,7 +39,11 @@ if is_raspberry_pi:
     import RPi.GPIO as GPIO
     GPIO.setmode(GPIO.BCM)
     from button_logic import ButtonTracker
-    if noCamera != True:
+
+    usbButton = evdev.InputDevice('/dev/input/event0')
+    print("Input Device event0: " + str(usbButton))
+
+    if noCamera == False:
         import picamera
         camera = picamera.PiCamera()
         camera.resolution = (864, 648)
@@ -65,10 +71,10 @@ def sendSerialMsg(status):
     if arduinoSerial is not None:
         arduinoSerial.write(status + "\n")
 
-def buttonPressed(pins, time):
+def buttonPressed(pins=[], timestamp=0):
     #print("Pressed buttons: ", pins)        
 
-    if is_raspberry_pi and noCamera != True:
+    if is_raspberry_pi and noCamera == False:
         pictureFileName = "photo.jpg"
         camera.start_preview()
         sleep(0.25)
@@ -97,15 +103,13 @@ def buttonPressed(pins, time):
             sendStatus("Beard detected", 1 * 3)
         if fee.isAggressive:
             sendStatus("Aggressive behavior detected", 1 * 4)
-        elif pins != 0 and sum(pins) > 1:
+        elif sum(pins) > 1:
             fee.aggressive = 50
             sendStatus("Aggressive behavior detected", 1 * 4)
         if fee.hasBadMood:
             sendStatus("Bad mood detected", 1 * 5)
 
-
         # Add aggressive fee if multi press of button happens
-
         print "Makeup: " + str(fee.makeup)
         print "Pyjama: " + str(fee.pyjama)
         print "Hipster: " + str(fee.hipster)
@@ -114,29 +118,26 @@ def buttonPressed(pins, time):
         print "Aggressive: " + str(fee.aggressive)
 
         photoData = imageParse(pictureFileName)
-
-        #sendStatus("Printing...")
+        
         if is_raspberry_pi and noPrint == False:
             sendStatus("Printing...", 1 * 6)
             thermal_printer = ThermalPrinter(photoData,384,153)
             thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
             sendStatus("Done.", 0)
         else:
-            sendStatus("Done.", 1 * 6)
-    # ERROR Image not recognised
+            sendStatus("Done.", 1 * 6)    
     else:
         sendSerialMsg('E')
-        sendStatus("No face detected.", 0)
-    #sendStatus("Take your bill.")
+        sendStatus("No face detected.", 0)         
 
 if is_raspberry_pi:
-    # buttonTracker = ButtonTracker(6, 13, 19, buttonPressed)    
-    buttonPressed(0,0)
+    #To use custom made button use ButtonTracker
+    #buttonTracker = ButtonTracker(6, 13, 19, buttonPressed)    
+
+    for event in usbButton.read_loop():     
+        if event.type == evdev.ecodes.EV_KEY and event.value == evdev.events.KeyEvent.key_up:       
+            #print(evdev.categorize(event))
+            buttonPressed([], time.time())
+
 else:
-    buttonPressed(0,0)
-
-while True:
-    time.sleep(0.1)
-    x=sys.stdin.read(1)[0]
-    print("You pressed", x)
-
+    buttonPressed()
