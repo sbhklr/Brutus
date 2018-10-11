@@ -166,7 +166,7 @@ def buttonPressed(pins=[], timestamp=0):
         if is_raspberry_pi and noPrint == False:
             sendStatus("Printing...", 1 * 6)
             thermal_printer = ThermalPrinter(photoData,384,153)
-            thermal_printer.printReceipt(fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
+            thermal_printer.printReceipt(fee)
             sendStatus("Done.", 0)
         else:
             sendStatus("Done.", 1 * 6)    

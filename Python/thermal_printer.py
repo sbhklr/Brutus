@@ -34,9 +34,9 @@ class ThermalPrinter:
 		if(feed > 0):
 			self.printer.feed(feed)
 
-	def printReceipt(self, makeupFee, pyjamaFee, hipsterFee, youngsterFee, badMoodFee, aggressiveFee):	
+	def printReceipt(self, fee):	
 		self.printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
-		self.printData(makeupFee, pyjamaFee, hipsterFee, youngsterFee, badMoodFee, aggressiveFee)
+		self.printData(fee.age, fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
 		self.printer.sleep()      # Tell printer to sleep
 		self.printer.wake()       # Call wake() before printing again, even if reset
 		self.printer.setDefault() # Restore printer to defaults
@@ -48,7 +48,7 @@ class ThermalPrinter:
 			return " " + str(number);
 		return str(number)
 
-	def printData(self, makeupFee, pyjamaFee, hipsterFee, youngsterFee, badMoodFee, aggressiveFee):
+	def printData(self, age, makeupFee, pyjamaFee, hipsterFee, youngsterFee, badMoodFee, aggressiveFee):
 		#Print logo
 		import gfx.logo as logo
 		self.printer.printBitmap(logo.width, logo.height, logo.data)
@@ -61,26 +61,27 @@ class ThermalPrinter:
 		self.printer.feed(1)
 		self.printer.setLineHeight(36)
 
-		baseFee = 50
+		baseFee = 8
 		totalFee = baseFee + makeupFee + pyjamaFee + hipsterFee + youngsterFee + badMoodFee + aggressiveFee
 
 		#Print Content
-		self.printLine("Base Fee                DKK " + self.formattedCurrency(baseFee), 'L', 'S', False, False, 1)
+		self.printLine("Estimated age                " + str(age), 'L', 'S', True)
+		self.printLine("Base Fee                EUR " + self.formattedCurrency(baseFee), 'L', 'S', False, False, 1)
 		
 		self.printLine("Appearance Cost", 'L', 'S', True)
-		self.printLine("No-Make-Up Fee          DKK " + self.formattedCurrency(makeupFee))
-		self.printLine("Pajamas Fee             DKK " + self.formattedCurrency(pyjamaFee))
-		self.printLine("Hipster Fee             DKK " + self.formattedCurrency(hipsterFee))
+		self.printLine("No-Make-Up Fee          EUR " + self.formattedCurrency(makeupFee))
+		self.printLine("Pajamas Fee             EUR " + self.formattedCurrency(pyjamaFee))
+		self.printLine("Hipster Fee             EUR " + self.formattedCurrency(hipsterFee))
 		self.printer.feed(1)
 
 		self.printLine("General Cost", 'L', 'S', True)
-		self.printLine("Youngster Fee           DKK " + self.formattedCurrency(youngsterFee))
-		self.printLine("Bad Mood Fee            DKK " + self.formattedCurrency(badMoodFee))	
-		self.printLine("Aggressive Behavior Fee DKK " + self.formattedCurrency(aggressiveFee))
+		self.printLine("Youngster Fee           EUR " + self.formattedCurrency(youngsterFee))
+		self.printLine("Bad Mood Fee            EUR " + self.formattedCurrency(badMoodFee))	
+		self.printLine("Aggressive Behavior Fee EUR " + self.formattedCurrency(aggressiveFee))
 		self.printer.feed(1)
 
 		#Print Total
-		self.printLine("Total                   DKK " + self.formattedCurrency(totalFee), 'L', 'S', True, True, 1)	
+		self.printLine("Total                   EUR " + self.formattedCurrency(totalFee), 'L', 'S', True, True, 1)	
 
 		#Print Barcode	
 		self.printer.setBarcodeHeight(100)
