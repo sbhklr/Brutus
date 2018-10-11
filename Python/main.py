@@ -10,9 +10,52 @@ import os
 import sys
 import time
 from time import sleep
+import evdev #SEE: https://python-evdev.readthedocs.io/en/latest/apidoc.html#
+from neopixel import *
 
-#SEE: https://python-evdev.readthedocs.io/en/latest/apidoc.html#
-import evdev
+########## NEO PIXEL SETUP ############
+LED_COUNT      = 9      # Number of LED pixels.
+LED_PIN_FLORA  = 18      # GPIO pin connected to the pixels (18 uses PWM!).
+LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
+LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
+LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
+LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
+LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
+LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
+
+blueColor = Color(0, 0, 255)
+redColor = Color(0, 255, 0)
+greenColor = Color(255, 0, 0)
+blackColor = Color(0,0,0)
+
+def setCameraLed(color):
+    flora.setPixelColor(0,color)
+    flora.show()
+
+def flashLedGreen():
+    setCameraLed(greenColor)
+    time.sleep(0.8)
+    setCameraLed(blueColor)
+
+def flashLedRed():
+    for i in range(3):
+        setCameraLed(redColor);
+        time.sleep(0.2)
+        setCameraLed(blackColor);
+        time.sleep(0.2)
+    setCameraLed(blueColor)
+
+strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+strip.begin()
+for i in range(strip.numPixels()):
+    strip.setPixelColor(i, blueColor)    
+strip.show()
+
+flora = Adafruit_NeoPixel(1, LED_PIN_FLORA, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+flora.begin()
+setCameraLed(blueColor)
+
+#######################################
 
 
 is_raspberry_pi = os.uname()[0] == "Linux"
@@ -20,8 +63,8 @@ is_raspberry_pi = os.uname()[0] == "Linux"
 print "Running on: " + str(os.uname())
 
 # Parse Arguments
-noPrint = True
-arduinoSerial = None
+noPrint = False
+noSerial = False
 noHttp = False
 noCamera = False
 
@@ -29,7 +72,7 @@ for eachArg in sys.argv:
     if eachArg == "noprint":
         noPrint = True
     if eachArg == "noserial":
-        arduinoSerial = None
+        noSerial = True
     if eachArg == "nohttp":
         noHttp = True
     if eachArg == "nocamera":
@@ -60,7 +103,7 @@ if noHttp:
 else:
     from sendStatus import sendStatus
 
-if arduinoSerial is not None:
+if noSerial == False:
     if is_raspberry_pi:
         arduinoSerial = serial.Serial('/dev/ttyACM0', 9600)
     else:
@@ -68,7 +111,7 @@ if arduinoSerial is not None:
     command = arduinoSerial.readline() # wait till arduino is ready
 
 def sendSerialMsg(status):
-    if arduinoSerial is not None:
+    if noSerial == False:
         arduinoSerial.write(status + "\n")
 
 def buttonPressed(pins=[], timestamp=0):
@@ -85,6 +128,7 @@ def buttonPressed(pins=[], timestamp=0):
 
     sendStatus("Analysing face...", 0)
     sendSerialMsg('P')
+    flashLedGreen()
 
     with open(pictureFileName, mode='rb') as file: # b is important -> binary
         fileContent = file.read()
@@ -128,6 +172,7 @@ def buttonPressed(pins=[], timestamp=0):
             sendStatus("Done.", 1 * 6)    
     else:
         sendSerialMsg('E')
+        flashLedRed()
         sendStatus("No face detected.", 0)         
 
 if is_raspberry_pi:
@@ -138,6 +183,7 @@ if is_raspberry_pi:
         if event.type == evdev.ecodes.EV_KEY and event.value == evdev.events.KeyEvent.key_up:       
             #print(evdev.categorize(event))
             buttonPressed([], time.time())
+    print("THE END.")
 
 else:
     buttonPressed()
