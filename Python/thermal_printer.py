@@ -70,7 +70,7 @@ class ThermalPrinter:
 		
 		self.printLine("Appearance Cost", 'L', 'S', True)
 		self.printLine("No-Make-Up Fee          EUR " + self.formattedCurrency(makeupFee))
-		self.printLine("Pajamas Fee             EUR " + self.formattedCurrency(pyjamaFee))
+		self.printLine("Underdressed Fee        EUR " + self.formattedCurrency(pyjamaFee))
 		self.printLine("Hipster Fee             EUR " + self.formattedCurrency(hipsterFee))
 		self.printer.feed(1)
 
