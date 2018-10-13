@@ -30,14 +30,15 @@ LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 blueColor = Color(0, 0, 255)
 redColor = Color(0, 255, 0)
 greenColor = Color(255, 0, 0)
+whiteColor = Color(255, 255, 255)
 blackColor = Color(0,0,0)
 
 def setCameraLed(color):
     flora.setPixelColor(0,color)
     flora.show()
 
-def flashLedGreen():
-    setCameraLed(greenColor)
+def flashLedWhite():
+    setCameraLed(whiteColor)
     time.sleep(0.8)
     setCameraLed(blueColor)
 
@@ -132,7 +133,7 @@ def buttonPressed(pins=[], timestamp=0):
 
     sendStatus(displayIP, "Analysing face...", 0)
     sendSerialMsg('P')
-    flashLedGreen()
+    flashLedWhite()
 
     with open(pictureFileName, mode='rb') as file: # b is important -> binary
         fileContent = file.read()
