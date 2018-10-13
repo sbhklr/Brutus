@@ -36,7 +36,7 @@ class ThermalPrinter:
 
 	def printReceipt(self, fee):	
 		self.printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
-		self.printData(fee.age, fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.badMood, fee.aggressive)
+		self.printData(fee.age, fee.makeup, fee.pyjama, fee.hipster, fee.youngster, fee.oldie, fee.badMood, fee.aggressive)
 		self.printer.sleep()      # Tell printer to sleep
 		self.printer.wake()       # Call wake() before printing again, even if reset
 		self.printer.setDefault() # Restore printer to defaults
@@ -48,7 +48,7 @@ class ThermalPrinter:
 			return " " + str(number);
 		return str(number)
 
-	def printData(self, age, makeupFee, pyjamaFee, hipsterFee, youngsterFee, badMoodFee, aggressiveFee):
+	def printData(self, age, makeupFee, pyjamaFee, hipsterFee, youngsterFee, oldieFee, badMoodFee, aggressiveFee):
 		#Print logo
 		import gfx.logo as logo
 		self.printer.printBitmap(logo.width, logo.height, logo.data)
@@ -62,7 +62,7 @@ class ThermalPrinter:
 		self.printer.setLineHeight(36)
 
 		baseFee = 8
-		totalFee = baseFee + makeupFee + pyjamaFee + hipsterFee + youngsterFee + badMoodFee + aggressiveFee
+		totalFee = baseFee + makeupFee + pyjamaFee + hipsterFee + youngsterFee + oldieFee + badMoodFee + aggressiveFee
 
 		#Print Content
 		self.printLine("Estimated age                " + str(age), 'L', 'S', True)
@@ -76,6 +76,7 @@ class ThermalPrinter:
 
 		self.printLine("General Cost", 'L', 'S', True)
 		self.printLine("Youngster Fee           EUR " + self.formattedCurrency(youngsterFee))
+		self.printLine("Oldie Fee               EUR " + self.formattedCurrency(oldieFee))
 		self.printLine("Bad Mood Fee            EUR " + self.formattedCurrency(badMoodFee))	
 		self.printLine("Aggressive Behavior Fee EUR " + self.formattedCurrency(aggressiveFee))
 		self.printer.feed(1)

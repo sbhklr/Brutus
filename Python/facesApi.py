@@ -8,6 +8,7 @@ class Fee:
         self.pyjama = 0
         self.hipster = 0
         self.youngster = 0
+        self.oldie = 0
         self.badMood = 0
         self.aggressive = 0
         self.gender = ""
@@ -67,21 +68,25 @@ def calculateFee(imageContent):
 
         if faceAttributes['gender'] == 'female':
             if (not faceAttributes['makeup']['eyeMakeup'] or not faceAttributes['makeup']['lipMakeup']):
-                fee.makeup = 5
+                fee.makeup = 6
                 fee.hasMakeup = False
             else:
                 fee.hasMakeup = True
 
         if faceAttributes['gender'] == 'male' and any((accessory['type'] == "headwear" and accessory['confidence'] > 0.5) for accessory in faceAttributes['accessories']):
-            fee.pyjama = 5
+            fee.pyjama = 6
 
         if(faceAttributes['facialHair']['beard'] > 0.3 or faceAttributes['facialHair']['moustache'] > 0.3):
             fee.hipster = 5
             fee.hasFacialHair = True
 
-        youngsterAge = 26
+        youngsterAge = 24
         if(faceAttributes['age'] < youngsterAge):
-            fee.youngster = int(round((youngsterAge-faceAttributes['age'])*2))
+            fee.youngster = min(int(round((youngsterAge-faceAttributes['age'])*2)), 8)
+
+        oldieAge = 32
+        if(faceAttributes['age'] > oldieAge):
+            fee.oldie = min(int(round((faceAttributes['age']-oldieAge)*2)), 10)
 
         happinessThreshold = 0.65
         if(faceAttributes['emotion']['happiness'] < happinessThreshold):
@@ -94,7 +99,7 @@ def calculateFee(imageContent):
         faceAttributes['emotion']['disgust'] > aggressiveThreshold or
         faceAttributes['emotion']['fear'] > aggressiveThreshold or
         faceAttributes['emotion']['sadness'] > aggressiveThreshold):
-            fee.aggressive = 8
+            fee.aggressive = 10
             fee.isAggressive = True
 
         #print ("Response:")

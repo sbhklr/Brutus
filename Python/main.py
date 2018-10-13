@@ -162,6 +162,7 @@ def buttonPressed(pins=[], timestamp=0):
         print "Underdressed: " + str(fee.pyjama)
         print "Hipster: " + str(fee.hipster)
         print "Youngster: " + str(fee.youngster)
+        print "Oldie: " + str(fee.oldie)
         print "badMood: " + str(fee.badMood)
         print "Aggressive: " + str(fee.aggressive)
 
