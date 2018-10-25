@@ -2,14 +2,14 @@ import httplib, urllib, base64, json
 from multiprocessing import Process
 import time
 
-def sendStatus(status, delay):
-    Process(target=httpSend, args=(status,delay,)).start()
+def sendStatus(ip, status, delay):
+    Process(target=httpSend, args=(ip,status,delay,)).start()
 
-def httpSend(status, delay):
+def httpSend(ip,status, delay):
     try:
         time.sleep(delay)
         print status
-        conn = httplib.HTTPConnection("192.168.1.121", 9080)
+        conn = httplib.HTTPConnection(ip, 9080)
         conn.request("GET", "/?display=" + urllib.quote(status))
         response = conn.getresponse()
         print response.status, response.reason
