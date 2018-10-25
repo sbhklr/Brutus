@@ -52,7 +52,7 @@ class ThermalPrinter:
 		#Print logo
 		import gfx.logo as logo
 		self.printer.printBitmap(logo.width, logo.height, logo.data)
-		self.printLine("ROOTS", 'C', 'L', True, False, 1)
+		self.printLine("BRUTUS", 'C', 'L', True, False, 1)
 
 		#Print photo
 		if self.photo_data is not None:
