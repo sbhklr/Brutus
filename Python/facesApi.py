@@ -1,21 +1,30 @@
-import httplib, urllib, base64, json
-from threading import Timer
-import time
+#!/usr/bin/python
 
-def sendStatus(status):
-    try:
-        conn = httplib.HTTPConnection("192.168.1.121", 9080)
-        conn.request("GET", "/?display=" + urllib.quote(status))
-        response = conn.getresponse()
-        print response.status, response.reason
-    except Exception as e:
-        print("[Errno {0}] {1}".format(e, e))
+import httplib, urllib, base64, json
+
+class Fee:
+    def __init__(self):
+        self.makeup = 0
+        self.pyjama = 0
+        self.hipster = 0
+        self.youngster = 0
+        self.oldie = 0
+        self.badMood = 0
+        self.aggressive = 0
+        self.gender = ""
+        self.age = 0
+        self.hasHeadwear = False
+        self.hasFacialHair = False
+        self.hasMakeup = False
+        self.hasBadMood = False
+        self.isAggressive = False
 
 # Return format Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
-def getFaceData(imageContent):
-    faceInfo = ''
+def calculateFee(imageContent):
+    fee = Fee()
 
-    subscription_key = '9e5fa5720aea424e85a93282173aad81'
+    subscription_key = 'f6f9914945dc40c5b8dfead928864193'
+    subscription_key = '577afa5697ac4121a20b70786bd1b8b9'
 
     uri_base = 'westcentralus.api.cognitive.microsoft.com'
 
@@ -33,8 +42,7 @@ def getFaceData(imageContent):
     })
 
     # The URL of a JPEG image to analyze.
-    body = "{'url':'https://scontent-ams3-1.cdninstagram.com/t51.2885-15/e35/19534308_302035696911316_6605913838757871616_n.jpg'}"
-
+    #body = "{'url':'https://scontent-ams3-1.cdninstagram.com/t51.2885-15/e35/19534308_302035696911316_6605913838757871616_n.jpg'}"
     body = imageContent
 
     try:
@@ -43,39 +51,47 @@ def getFaceData(imageContent):
         conn.request("POST", "/face/v1.0/detect?%s" % params, body, headers)
         response = conn.getresponse()
         data = response.read()
-
+        print("Data loaded.")
         # 'data' contains the JSON data. The following formats the JSON data for display.
         parsed = json.loads(data)
-
+        print(data)
         # Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
         # No makeup
+
+        if len(parsed) == 0:
+            return None
         faceAttributes = parsed[0]['faceAttributes']
-        if(faceAttributes['gender'] == 'female' and (not faceAttributes['makeup']['eyeMakeup'] or not faceAttributes['makeup']['lipMakeup'])):
-            faceInfo += '50'
-        else:
-            faceInfo += '00'
+        fee.gender = faceAttributes['gender']
+        fee.age = int(faceAttributes['age'])
+        if any((accessory['type'] == "headwear" and accessory['confidence'] > 0.5) for accessory in faceAttributes['accessories']):
+            fee.hasHeadwear = True
 
-        if faceAttributes['gender'] == 'male' and any("headwear" in s for s in faceAttributes['accessories']):
-            faceInfo += '50'
-        else:
-            faceInfo += '00'
+        if faceAttributes['gender'] == 'female':
+            if (not faceAttributes['makeup']['eyeMakeup'] or not faceAttributes['makeup']['lipMakeup']):
+                fee.makeup = 6
+                fee.hasMakeup = False
+            else:
+                fee.hasMakeup = True
 
-        if(faceAttributes['facialHair']['beard'] > 0.5 and faceAttributes['facialHair']['moustache'] > 0.5):
-            faceInfo += '50'
-        else:
-            faceInfo += '00'
+        if faceAttributes['gender'] == 'male' and any((accessory['type'] == "headwear" and accessory['confidence'] > 0.5) for accessory in faceAttributes['accessories']):
+            fee.pyjama = 6
+
+        if(faceAttributes['facialHair']['beard'] > 0.3 or faceAttributes['facialHair']['moustache'] > 0.3):
+            fee.hipster = 5
+            fee.hasFacialHair = True
 
         youngsterAge = 24
         if(faceAttributes['age'] < youngsterAge):
-            faceInfo += '%02d' % (round((youngsterAge-faceAttributes['age'])*15),)
-        else:
-            faceInfo += '00'
+            fee.youngster = min(int(round((youngsterAge-faceAttributes['age'])*2)), 8)
 
-        happinessThreshold = 0.5
+        oldieAge = 32
+        if(faceAttributes['age'] > oldieAge):
+            fee.oldie = min(int(round((faceAttributes['age']-oldieAge)*2)), 10)
+
+        happinessThreshold = 0.65
         if(faceAttributes['emotion']['happiness'] < happinessThreshold):
-            faceInfo += '%02d' % (round(100-faceAttributes['emotion']['happiness']*100),)
-        else:
-            faceInfo += '00'
+            fee.badMood = int(round((1.0-faceAttributes['emotion']['happiness'])*8))
+            fee.hasBadMood = True
 
         aggressiveThreshold = 0.2
         if(faceAttributes['emotion']['anger'] > aggressiveThreshold or
@@ -83,21 +99,13 @@ def getFaceData(imageContent):
         faceAttributes['emotion']['disgust'] > aggressiveThreshold or
         faceAttributes['emotion']['fear'] > aggressiveThreshold or
         faceAttributes['emotion']['sadness'] > aggressiveThreshold):
-            faceInfo += '50'
-        else:
-            faceInfo += '00'
+            fee.aggressive = 10
+            fee.isAggressive = True
 
         #print ("Response:")
-        #print (json.dumps(parsed, sort_keys=True, indent=2))
+        # print (json.dumps(parsed, sort_keys=True, indent=2))
         conn.close()
 
     except Exception as e:
-        print("[Errno {0}] {1}".format(e, e))
-    return faceInfo
-
-    ####################################
-
-
-#faceInfo = getFaceData(fileContent)
-#print faceInfo
-#print 'Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive\n'
+        print("[Errno {0}] {1}".format(e, data))
+    return fee

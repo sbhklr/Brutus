@@ -1,39 +1,49 @@
 import base64, string
 import struct
 from PIL import Image # Using Pillow
+from PIL import ImageEnhance
 
-# logo_width  384 (176)
-# logo_height 153
+def change_contrast(img, level):
+    factor = (259 * (level + 255)) / (255 * (259 - level))
+    def contrast(c):
+        value = 128 + factor * (c - 128)
+        return max(0, min(255, value))
+    return img.point(contrast)
 
-spacing = 0
+max_width = 384
+imageWidth = 176
+spacing = (max_width - imageWidth) / 2
+imageHeight = 153
 
-
-
- #Can be many different formats.
+# Returns 8 Bit Int Array
 def imageParse(fileName):
-    im = Image.open(fileName)
-    im = im.resize((36,36), Image.ANTIALIAS)
+    parsedImageArray = []
+
+    original = Image.open(fileName)    
+    resized = original.resize((imageWidth,imageHeight), Image.ANTIALIAS)
+    #contrast_image = change_contrast(resized, 175)
+    dithered = resized.convert(mode='1')
+    #dithered.save("dithered.jpg")    
+
+    im = dithered    
     pix = im.load()
-    print im.size #Get the width and hight of the image for iterating over
-    (r,g,b) = pix[1,1]
+    print im.size #Get the width and hight of the image for iterating over    
     imgStr = ''
     currentBlock = '';
     for y in range(0, im.height):
         line = ''
         for x in range(0, im.width + spacing * 2):
             if(x > spacing and x < (im.width + spacing)):
-                (r,g,b) = pix[x-spacing,y]
-                if((r+b+g)/3 >= 128):
-                    currentBlock += '1'
-                else:
+                #(r,g,b) = pix[x-spacing,y]
+                #if((r+b+g)/3 >= 128):
+                if(pix[x-spacing,y] >= 128):
                     currentBlock += '0'
+                else:
+                    currentBlock += '1'
             else:
                 currentBlock += '0'
 
             if(len(currentBlock)>=8):
-                #print currentBlock
-                #print '%03d\n' % int(currentBlock, 2)
-                imgStr += '%03d' % int(currentBlock, 2)
+                parsedImageArray.append(int(currentBlock, 2))
                 currentBlock = ''
-    return imgStr
-#int(imgStr, 2)
+    return parsedImageArray
