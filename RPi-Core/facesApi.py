@@ -22,9 +22,8 @@ class Fee:
 # Return format Makeup;Pyjama;Hipster;Youngsster;BadMood;Aggressive
 def calculateFee(imageContent):
     fee = Fee()
-
-    subscription_key = 'f6f9914945dc40c5b8dfead928864193'
-    subscription_key = '577afa5697ac4121a20b70786bd1b8b9'
+    
+    subscription_key = 'YOUR-COGNITIVE-SERVICES-API-KEY'
 
     uri_base = 'westcentralus.api.cognitive.microsoft.com'
 
