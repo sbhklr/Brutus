@@ -1,0 +1,393 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A6E539B91F43BCC9B86977CF /* Pods_BouncerDisplay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66005A049007D4E7C1F5F315 /* Pods_BouncerDisplay.framework */; };
+		F3ADB4461F03117800B20798 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3ADB4451F03117800B20798 /* AppDelegate.swift */; };
+		F3ADB4481F03117800B20798 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3ADB4471F03117800B20798 /* ViewController.swift */; };
+		F3ADB44B1F03117800B20798 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3ADB4491F03117800B20798 /* Main.storyboard */; };
+		F3ADB44D1F03117800B20798 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F3ADB44C1F03117800B20798 /* Assets.xcassets */; };
+		F3ADB4501F03117800B20798 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3ADB44E1F03117800B20798 /* LaunchScreen.storyboard */; };
+		F3ADB4581F032A8300B20798 /* animation.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F3ADB4571F03160C00B20798 /* animation.mp4 */; };
+		F3ADB45A1F03A93D00B20798 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3ADB4591F03A93D00B20798 /* PlayerView.swift */; };
+		F3ADB45C1F03A95200B20798 /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3ADB45B1F03A95200B20798 /* VideoPlayer.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		109A508345A4F03C780D0BF9 /* Pods-BouncerDisplay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BouncerDisplay.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BouncerDisplay/Pods-BouncerDisplay.debug.xcconfig"; sourceTree = "<group>"; };
+		66005A049007D4E7C1F5F315 /* Pods_BouncerDisplay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BouncerDisplay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F367309AE24646D23E6887B1 /* Pods-BouncerDisplay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BouncerDisplay.release.xcconfig"; path = "Pods/Target Support Files/Pods-BouncerDisplay/Pods-BouncerDisplay.release.xcconfig"; sourceTree = "<group>"; };
+		F3ADB4421F03117800B20798 /* BouncerDisplay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BouncerDisplay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3ADB4451F03117800B20798 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F3ADB4471F03117800B20798 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F3ADB44A1F03117800B20798 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F3ADB44C1F03117800B20798 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F3ADB44F1F03117800B20798 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F3ADB4511F03117800B20798 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3ADB4571F03160C00B20798 /* animation.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = animation.mp4; sourceTree = "<group>"; };
+		F3ADB4591F03A93D00B20798 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		F3ADB45B1F03A95200B20798 /* VideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F3ADB43F1F03117800B20798 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6E539B91F43BCC9B86977CF /* Pods_BouncerDisplay.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C58931D25AF07D9C0EABE412 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				66005A049007D4E7C1F5F315 /* Pods_BouncerDisplay.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E57FC988EAC6EB374C2C182A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				109A508345A4F03C780D0BF9 /* Pods-BouncerDisplay.debug.xcconfig */,
+				F367309AE24646D23E6887B1 /* Pods-BouncerDisplay.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		F3ADB4391F03117800B20798 = {
+			isa = PBXGroup;
+			children = (
+				F3ADB4441F03117800B20798 /* BouncerDisplay */,
+				F3ADB4431F03117800B20798 /* Products */,
+				E57FC988EAC6EB374C2C182A /* Pods */,
+				C58931D25AF07D9C0EABE412 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F3ADB4431F03117800B20798 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F3ADB4421F03117800B20798 /* BouncerDisplay.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F3ADB4441F03117800B20798 /* BouncerDisplay */ = {
+			isa = PBXGroup;
+			children = (
+				F3ADB4571F03160C00B20798 /* animation.mp4 */,
+				F3ADB4451F03117800B20798 /* AppDelegate.swift */,
+				F3ADB4471F03117800B20798 /* ViewController.swift */,
+				F3ADB4491F03117800B20798 /* Main.storyboard */,
+				F3ADB44C1F03117800B20798 /* Assets.xcassets */,
+				F3ADB44E1F03117800B20798 /* LaunchScreen.storyboard */,
+				F3ADB4511F03117800B20798 /* Info.plist */,
+				F3ADB4591F03A93D00B20798 /* PlayerView.swift */,
+				F3ADB45B1F03A95200B20798 /* VideoPlayer.swift */,
+			);
+			path = BouncerDisplay;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F3ADB4411F03117800B20798 /* BouncerDisplay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3ADB4541F03117800B20798 /* Build configuration list for PBXNativeTarget "BouncerDisplay" */;
+			buildPhases = (
+				38F620DFFC0EB78619A60399 /* [CP] Check Pods Manifest.lock */,
+				F3ADB43E1F03117800B20798 /* Sources */,
+				F3ADB43F1F03117800B20798 /* Frameworks */,
+				F3ADB4401F03117800B20798 /* Resources */,
+				9B83DF6DA0C1FB73E1B8C1C5 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BouncerDisplay;
+			productName = BouncerDisplay;
+			productReference = F3ADB4421F03117800B20798 /* BouncerDisplay.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F3ADB43A1F03117800B20798 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = Sbhklr;
+				TargetAttributes = {
+					F3ADB4411F03117800B20798 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = X8STHJ2G3M;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F3ADB43D1F03117800B20798 /* Build configuration list for PBXProject "BouncerDisplay" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F3ADB4391F03117800B20798;
+			productRefGroup = F3ADB4431F03117800B20798 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F3ADB4411F03117800B20798 /* BouncerDisplay */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F3ADB4401F03117800B20798 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3ADB4581F032A8300B20798 /* animation.mp4 in Resources */,
+				F3ADB4501F03117800B20798 /* LaunchScreen.storyboard in Resources */,
+				F3ADB44D1F03117800B20798 /* Assets.xcassets in Resources */,
+				F3ADB44B1F03117800B20798 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		38F620DFFC0EB78619A60399 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BouncerDisplay-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9B83DF6DA0C1FB73E1B8C1C5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BouncerDisplay/Pods-BouncerDisplay-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Player/Player.framework",
+				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Player.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BouncerDisplay/Pods-BouncerDisplay-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F3ADB43E1F03117800B20798 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3ADB45C1F03A95200B20798 /* VideoPlayer.swift in Sources */,
+				F3ADB45A1F03A93D00B20798 /* PlayerView.swift in Sources */,
+				F3ADB4481F03117800B20798 /* ViewController.swift in Sources */,
+				F3ADB4461F03117800B20798 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F3ADB4491F03117800B20798 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F3ADB44A1F03117800B20798 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F3ADB44E1F03117800B20798 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F3ADB44F1F03117800B20798 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F3ADB4521F03117800B20798 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F3ADB4531F03117800B20798 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F3ADB4551F03117800B20798 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 109A508345A4F03C780D0BF9 /* Pods-BouncerDisplay.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = X8STHJ2G3M;
+				INFOPLIST_FILE = BouncerDisplay/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = ch.sbhklr.BouncerDisplay;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		F3ADB4561F03117800B20798 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F367309AE24646D23E6887B1 /* Pods-BouncerDisplay.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = X8STHJ2G3M;
+				INFOPLIST_FILE = BouncerDisplay/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = ch.sbhklr.BouncerDisplay;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F3ADB43D1F03117800B20798 /* Build configuration list for PBXProject "BouncerDisplay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3ADB4521F03117800B20798 /* Debug */,
+				F3ADB4531F03117800B20798 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3ADB4541F03117800B20798 /* Build configuration list for PBXNativeTarget "BouncerDisplay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3ADB4551F03117800B20798 /* Debug */,
+				F3ADB4561F03117800B20798 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F3ADB43A1F03117800B20798 /* Project object */;
+}

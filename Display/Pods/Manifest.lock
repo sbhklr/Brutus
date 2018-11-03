@@ -1,0 +1,20 @@
+PODS:
+  - Player (0.12.1)
+  - Swifter (1.4.1)
+
+DEPENDENCIES:
+  - Player
+  - Swifter
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Player
+    - Swifter
+
+SPEC CHECKSUMS:
+  Player: ae8070a33c9360f5c93c247c00236b9489f62fca
+  Swifter: 62d14781d34600ffb6be99d350cf271be500600f
+
+PODFILE CHECKSUM: 7148c63f6ed3e50939210df800aff3b7cff9b55d
+
+COCOAPODS: 1.6.0.beta.1

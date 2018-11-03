@@ -1,0 +1,9 @@
+# Uncomment the next line to define a global platform for your project
+ platform :ios, '9.0'
+
+target 'BouncerDisplay' do  
+	use_frameworks!
+	pod 'Swifter'
+	#pod 'Taylor'
+	pod 'Player'
+end

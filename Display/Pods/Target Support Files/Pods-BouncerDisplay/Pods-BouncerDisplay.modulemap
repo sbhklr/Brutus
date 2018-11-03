@@ -1,0 +1,6 @@
+framework module Pods_BouncerDisplay {
+  umbrella header "Pods-BouncerDisplay-umbrella.h"
+
+  export *
+  module * { export * }
+}
